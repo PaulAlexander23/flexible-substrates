@@ -6,7 +6,7 @@ stable = zeros(20);
 
 for j = 1:20
     for k = 1:20
-        stable(j,k) = OS_eigs_corrected(1,R(k),1,1,1,1,1,AK(j));
+        stable(j,k) = OS_eigs_corrected_again(1,R(k),1,1,1,1,1,AK(j));
     end
 end
 
