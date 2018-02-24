@@ -8,7 +8,7 @@ cotbeta=1;
 S=1; 
 AD=1;
 AT=1; 
-AB=0; 
+AB=1; 
 AK=0.01;
 
 %mesh and range of k-R plane
