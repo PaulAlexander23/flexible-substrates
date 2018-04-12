@@ -18,7 +18,7 @@ function [dominant_ci, c] = OS_eigs_corrected_again(k,R,cotbeta,S,AD,AT,AB,AK)
 
 
 %number of modes/polynomials
-N=20;
+N=50;
 M=N+3; %A,B are 2Mx2M
 
 %Construct D and D^2
@@ -106,13 +106,14 @@ B=[zeros(M-2,2*M); zeros(M-2,M) -1i*k*R*I; b1f b1c; b2f b2c; b3f b3c; b4f b4c];
 %B(2*M-1,:)=[]; B(:,M)=[];
 
 %solve eigenvalue problem A*x=c*B*x
-c_raw=eig(A,B);
+c_raw=eig(A,B)
 for j=1:length(c_raw)           %remove inf eigs
     if isfinite(c_raw(j))==0
-        c_raw(j)=0;
+        c_raw(j)=NaN;
     end
 end
-[row,col,c]=find(c_raw);
+c = c_raw(~isnan(c_raw));
+%[row,col,c]=find(c_raw);
 
 % plot_modes=0;
 % if plot_modes==1
@@ -127,16 +128,16 @@ end
 %e.g., 10^6
 [dominant_ci,j]=max(imag(c));
 dominant_cr=real(c(j));
-while sqrt(dominant_cr^2+dominant_ci^2)>10^6, 
+while sqrt(dominant_cr^2+dominant_ci^2)>10^5, 
     c(j)=[]; [dominant_ci,j]=max(imag(c)); dominant_cr=real(c(j)); 
 end
 
 %ignore modes with c=0 and count how many
-zero_modes_ignored=0;
-while sqrt(dominant_cr^2+dominant_ci^2)<10^(-8),
-    c(j)=[]; [dominant_ci,j]=max(imag(c)); dominant_cr=real(c(j));
-    zero_modes_ignored=zero_modes_ignored+1;
-end
+% zero_modes_ignored=0;
+% while sqrt(dominant_cr^2+dominant_ci^2)<10^(-8),
+%     c(j)=[]; [dominant_ci,j]=max(imag(c)); dominant_cr=real(c(j));
+%     zero_modes_ignored=zero_modes_ignored+1;
+% end
 
 
 end
