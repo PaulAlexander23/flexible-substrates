@@ -1,4 +1,4 @@
-function plot_phase_speed_linear(R,cotbeta,S,AT,AB,AK,AI)
+function plot_phase_speed_long_wave(R,cotbeta,S,AT,AB,AK,AI)
     
     M = 100;
     k = linspace(0,1.5,M);
