@@ -1,4 +1,4 @@
-function plot_dispersion_relation(R,cotbeta,S,AT,AB,AK)
+function plot_dispersion_relation(R,cotbeta,S,AD,AT,AB,AK)
     
     M = 100;
     k = linspace(0,1.5,M);

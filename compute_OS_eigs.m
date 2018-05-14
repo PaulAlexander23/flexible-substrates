@@ -138,6 +138,5 @@ function [dominant_ci, c] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
         c(j)=[]; [dominant_ci,j]=max(imag(c)); dominant_cr=real(c(j));
         zero_modes_ignored=zero_modes_ignored+1;
     end
-    display(zero_modes_ignored)
     
 end
