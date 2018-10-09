@@ -1,5 +1,4 @@
 function [val, vec] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
-    
     %Solution of the Orr-Sommerfeld eigenvalue problem for the complex wave
     %speed c(k,...) = cr + i*ci
     %Outputs a vector of eigenvalues, and the most positive imaginary
@@ -83,7 +82,7 @@ function [val, vec] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
     [vec, val]=eig(A,B,'vector');
     
     %Filter results
-    upper_threshold = 1e6; 
+    upper_threshold = 1e6;
     val = val(abs(val) < upper_threshold);
     vec = vec(:,abs(val) < upper_threshold);
     
@@ -95,5 +94,4 @@ function [val, vec] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
     
     val = val(index);
     vec = vec(:,index);
-    
 end
