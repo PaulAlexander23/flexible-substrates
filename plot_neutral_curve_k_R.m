@@ -1,5 +1,5 @@
-function [ci, R, k] = plot_k_R(cotbeta,S,AD,AT,AB,AK)
-    
+function [ci, R, k] = plot_neutral_curve_k_R(cotbeta,S,AD,AT,AB,AK)
+    %PLOT_NEUTRAL_CURVE_K_R
     kN = 100;
     k = linspace(0,1.5,kN);
     RN = 100;
@@ -8,7 +8,7 @@ function [ci, R, k] = plot_k_R(cotbeta,S,AD,AT,AB,AK)
     
     parfor j = 1:RN
         for n = 1:kN
-            ci(n,j) = imag(compute_c_numerics(k(n),R(j),cotbeta,S,AD,AT,AB,AK));
+            ci(n,j) = max(imag(compute_OS_eigs(k(n),R(j),cotbeta,S,AD,AT,AB,AK)));
         end
     end
     

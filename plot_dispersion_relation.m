@@ -1,11 +1,13 @@
 function plot_dispersion_relation(R,cotbeta,S,AD,AT,AB,AK)
-    
+    %PLOT_DISPERSION_RELATION
     M = 100;
     k = linspace(0.0001,2,M);
-    c = zeros(M,4);
+    numberOfModes = 4;
+    c = zeros(M,numberOfModes);
     
     parfor j = 1:M
-        c(j,:) = compute_c_numerics(k(j),R,cotbeta,S,AD,AT,AB,AK);
+        e = compute_OS_eigs(k(j),R,cotbeta,S,AD,AT,AB,AK);
+        c(j,:) = e(1:numberOfModes);
     end
     
     plot(k,imag(c));

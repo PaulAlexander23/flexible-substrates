@@ -1,5 +1,5 @@
-function c = compute_c_long_wave(k,R,cotbeta,S,AD,AT,AB,AK,AI)
-    %COMPUTE_C_LONG_WAVE Given required parameters, returns eigenvalue c
+function c = compute_long_wave(k,R,cotbeta,S,AD,AT,AB,AK,AI)
+    %COMPUTE_LONG_WAVE Given required parameters, returns eigenvalue c
     %from the asymptotic long wave analysis.
     c = 2 + k .* (-20.*1i.*cotbeta .^ 2 + ((5.*1i .* AK + 5.*1i .* AB + ...
         (10 .* AD) + 5.*1i .* AT + -8.*1i .* R + -20.*1i .* AI) .* S - ...
