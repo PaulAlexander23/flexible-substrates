@@ -1,11 +1,14 @@
 function plot_phase_speed(R,cotbeta,S,AD,AT,AB,AK)
-    
-    M = 100;
-    k = linspace(0,2,M);
-    c = zeros(M,1);
+    %PLOT_PHASE_SPEED
+    M = 200;
+    kL = 2;
+    k = linspace(kL/M,kL,M);
+    numberOfModes = 4;
+    c = zeros(M,numberOfModes);
     
     parfor j = 1:M
-        c(j) = compute_c_numerics(k(j),R,cotbeta,S,AD,AT,AB,AK);
+        e = compute_OS_eigs(k(j),R,cotbeta,S,AD,AT,AB,AK);
+        c(j,:) = e(1:numberOfModes);
     end
     
     plot(k,real(c));

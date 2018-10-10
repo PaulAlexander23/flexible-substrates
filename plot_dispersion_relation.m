@@ -1,7 +1,8 @@
 function plot_dispersion_relation(R,cotbeta,S,AD,AT,AB,AK)
     %PLOT_DISPERSION_RELATION
-    M = 100;
-    k = linspace(0.0001,2,M);
+    M = 200;
+    kL = 2;
+    k = linspace(kL/M,kL,M);
     numberOfModes = 4;
     c = zeros(M,numberOfModes);
     
@@ -14,5 +15,4 @@ function plot_dispersion_relation(R,cotbeta,S,AD,AT,AB,AK)
     xlabel('$\alpha$','Interpreter','latex')
     ylabel('$\Im(c)$','Interpreter','latex')
     title('Dispersion relation')
-    axis([0,2,-2,2])
 end
