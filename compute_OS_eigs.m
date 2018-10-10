@@ -1,4 +1,4 @@
-function [val, vec] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
+function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
     %COMPUTE_OS_EIGS Solution of the Orr-Sommerfeld eigenvalue problem for the complex wave
     %speed c(k,...) = cr + i*ci
     %Outputs a vector of sorted eigenvalues, and a matric of eigenvectors.
@@ -80,17 +80,31 @@ function [val, vec] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
     %Solve eigenvalue problem A*x=c*B*x
     [vec, val]=eig(A,B,'vector');
     
+    %Compute residual
+    residual = (sum(abs((A*vec - B*vec*diag(val))).^2).^0.5)';
+    
     %Filter results
-    upper_threshold = 1e6;
-    val = val(abs(val) < upper_threshold);
-    vec = vec(:,abs(val) < upper_threshold);
+    %upper_threshold = 1e6; %1e6
+    %index = abs(val) < upper_threshold;
+    %val = val(index);
+    %vec = vec(:,index);
+    %residual = residual(index);
     
-    lower_threshold = 1e-8; % 1e-8
-    val = val(abs(val) > lower_threshold);
-    vec = vec(:,abs(val) > lower_threshold);
-    
-    [~,index] = sort(imag(val),'descend');
-    
+    lower_threshold = 1e-8; %1e-8
+    index = abs(val) > lower_threshold;
     val = val(index);
     vec = vec(:,index);
+    residual = residual(index);
+    
+    residual_threshold = 1e-3; %1e-3
+    index = residual<residual_threshold;
+    val = val(index);
+    vec = vec(:,index);
+    residual = residual(index);
+    
+    %Sort results
+    [~,index] = sort(imag(val),'descend');
+    val = val(index);
+    vec = vec(:,index);
+    residual = residual(index);
 end
