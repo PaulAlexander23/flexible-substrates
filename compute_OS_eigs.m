@@ -1,9 +1,8 @@
-function [dominant_ci, c] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
-    %COMPUTE_OS_EIGS Numerically computes the eigenvalues of the Orr-Sommerfeld problem
-    %Solution of the Orr-Sommerfeld eigenvalue problem for the complex wave
+function [val, vec] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
+    %COMPUTE_OS_EIGS Solution of the Orr-Sommerfeld eigenvalue problem for the complex wave
     %speed c(k,...) = cr + i*ci
-    %Outputs a vector of eigenvalues, and the most positive imaginary
-    %part, dominant_ci. Zero modes and spurious modes ignored.
+    %Outputs a vector of sorted eigenvalues, and a matric of eigenvectors.
+    %Zero modes and spurious modes ignored.
     %k = wavenumber
     %R = Reynolds number
     %cotbeta = cot(inclination angle \beta)
@@ -14,75 +13,50 @@ function [dominant_ci, c] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
     %AK = stiffness parameter A_K'
     %
     %S', A_D', A_T', A_B', A_K' are the rescaled versions of the parameters,
-    %see page ? of the paper.
-    
-    
-    %number of modes/polynomials
-    N=50;
-    M=N+3; %A,B are 2Mx2M
+    %see page 7 of the paper.
+    M=20+3; %A,B are 2Mx2M, M = number of modes/polynomials + 3
     
     %Construct D and D^2
+    I=eye(M);
     D=zeros(M,M);
-    j=1;
-    while 2*j<=M
-        D(1,2*j)=2*j-1; j=j+1;
+    for j = 1:M/2
+        D(1,2*j)=2*j-1;
     end
-    for l=2:M
-        j=1;
-        while l+2*j-1<=M
-            D(l,l+2*j-1)=2*(l+2*(j-1)); j=j+1;
+    for m=2:M
+        for j = 1:(M-m+1)/2
+            D(m,m+2*j-1)=2*(m+2*(j-1));
         end
     end
-    clear l
     D2=D*D;
-    I=eye(M);
     
     %Construct V
     P=zeros(M,M); P(2,1)=1/4; P(3,1)=-1/16; P(2,2)=-1/16;
-    
-    B=[ones(M,1) 3*ones(M,1) ones(M,1)]; Q=1/4*(spdiags(B,[-1 0 1],M,M));
-    
+    B=[ones(M,1) 3*ones(M,1) ones(M,1)];Q=1/4*(spdiags(B,[-1 0 1],M,M));
     B=[ones(M,1) zeros(M,1) 2*ones(M,1) zeros(M,1) ones(M,1)]; ...
         F=-1/16*(spdiags(B,[-2 -1 0 1 2],M,M));
     
     V=P+Q+F;
     
     %BCs
-    clear n a3f b3f a4f b4f
     a1f=(2*k^2+2)*ones(1,M);
     a1c=ones(1,M);
     b1f=2*k^2*a1c;
     b1c=a1c;
     
-    for j=1:M, n(j)=(j-1)^2; end
-    a2f=k^3*(2*cotbeta+k^2*S)*a1c+2*(k*R-2*1i*k^2)*n;
-    a2c=k/2*(2*cotbeta+k^2*S)*a1c+2*1i*n;
-    b2f=2*k*R*n;
+    a2f=k^3*(2*cotbeta+k^2*S)*a1c+2*(k*R-2*1i*k^2)*(0:M-1).^2;
+    a2c=k/2*(2*cotbeta+k^2*S)*a1c+2*1i*(0:M-1).^2;
+    b2f=2*k*R*(0:M-1).^2;
     b2c=zeros(1,M);
     
-    % %old BC3
-    % for j=1:M, a3f(j)=(-1)^j*(j-1)^2; end
-    % a3c=zeros(1,M); b3f=zeros(1,M); b3c=zeros(1,M);
+    a3f =(-1).^(0:M-1);
+    b3f =(-1).^(0:M-1).*(0:M-1).^2;
+    a3c=zeros(1,M);
+    b3c=zeros(1,M);
     
-    %updated BC3
-    for j=1:M
-        a3f(j)=(-1)^(j-1);
-        b3f(j)=(-1)^(j-1)*(j-1)^2;
-    end
-    a3c=zeros(1,M); b3c=zeros(1,M);
-    
-    
-    
-    
-    for j=1:M
-        %    a4f(j)=(-1i*k*(k^2*AT+k^4*AB+AK-2*cotbeta)+4*k^2)*(-1)^(j+1); %old BC4
-        %    b4f(j)=k*(k*AD+2*R*1i)*(-1)^(j+1);                            %old BC4
-        a4f(j)=(-1i*k*(k^2*AT+k^4*AB+AK-2*cotbeta))*(-1)^(j+1);
-        b4f(j)=k*(k*AD)*(-1)^(j+1);
-    end
+    a4f=(-1i*k*(k^2*AT+k^4*AB+AK-2*cotbeta))*(-1).^(0:M-1);
+    b4f=k*(k*AD)*(-1).^(0:M-1);
     a4c=zeros(1,M);
-    %b4c=2*a3f; %using old BC3
-    b4c=-2*b3f; %using updated BC3
+    b4c=-2*b3f;
     
     %Trim D2,I,V by 2 rows
     D2=D2(1:M-2,:);
@@ -90,53 +64,33 @@ function [dominant_ci, c] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
     V=V(1:M-2,:);
     
     %Construct A and B
-    A=[4*D2-k^2*I -I; -2*1i*k*R*I 4*D2-k^2*I-1i*k*R*V; a1f a1c; a2f a2c; a3f a3c; a4f a4c];
-    B=[zeros(M-2,2*M); zeros(M-2,M) -1i*k*R*I; b1f b1c; b2f b2c; b3f b3c; b4f b4c];
+    A=[4*D2-k^2*I -I;...
+        -2*1i*k*R*I 4*D2-k^2*I-1i*k*R*V;...
+        a1f a1c;...
+        a2f a2c;...
+        a3f a3c;...
+        a4f a4c];
+    B=[zeros(M-2,2*M);...
+        zeros(M-2,M) -1i*k*R*I;...
+        b1f b1c;...
+        b2f b2c;...
+        b3f b3c;...
+        b4f b4c];
     
-    %Removal of 3rd BC
-    %elim=zeros(1,2*M);
-    %for j=1:(M-1)
-    %    elim(j)=(-1)^(M+j)/(M^2)*(j-1)^2;
-    %end
-    %for j=1:2*M
-    %    A(j,:)=A(j,:)+A(j,M)*elim;
-    %    B(j,:)=B(j,:)+B(j,M)*elim;
-    %end
-    %A(2*M-1,:)=[]; A(:,M)=[];
-    %B(2*M-1,:)=[]; B(:,M)=[];
+    %Solve eigenvalue problem A*x=c*B*x
+    [vec, val]=eig(A,B,'vector');
     
-    %solve eigenvalue problem A*x=c*B*x
-    c_raw=eig(A,B);
-    for j=1:length(c_raw)           %remove inf eigs
-        if isfinite(c_raw(j))==0
-            c_raw(j)=NaN;
-        end
-    end
-    c = c_raw(~isnan(c_raw));
-    %[row,col,c]=find(c_raw);
+    %Filter results
+    upper_threshold = 1e6;
+    val = val(abs(val) < upper_threshold);
+    vec = vec(:,abs(val) < upper_threshold);
     
-    % plot_modes=0;
-    % if plot_modes==1
-    % clear figure
-    % plot(c,'o','markersize',5), grid on, xlabel('c_r'), ylabel('c_i'), xlim([-1 2]),
-    % ylim([-1 0.5])
-    % title(['\alpha=', num2str(k), ', R=', num2str(R), ', cot\beta=', num2str(cotB), ', S=', num2str(S), ...
-    %     ', A_D=', num2str(AD), ', A_T=', num2str(AT), ', A_B=', num2str(AB), ', A_K=', num2str(AK)])
-    % end
+    lower_threshold = 1e-8; % 1e-8
+    val = val(abs(val) > lower_threshold);
+    vec = vec(:,abs(val) > lower_threshold);
     
-    %eliminate spurious modes that have magnitude above a certain threshold,
-    %e.g., 10^6
-    [dominant_ci,j]=max(imag(c));
-    dominant_cr=real(c(j));
-    while sqrt(dominant_cr^2+dominant_ci^2)>10^5
-        c(j)=[]; [dominant_ci,j]=max(imag(c)); dominant_cr=real(c(j));
-    end
+    [~,index] = sort(imag(val),'descend');
     
-    %ignore modes with c=0 and count how many
-    zero_modes_ignored=0;
-    while sqrt(dominant_cr^2+dominant_ci^2)<10^(-8)
-        c(j)=[]; [dominant_ci,j]=max(imag(c)); dominant_cr=real(c(j));
-        zero_modes_ignored=zero_modes_ignored+1;
-    end
-    
+    val = val(index);
+    vec = vec(:,index);
 end
