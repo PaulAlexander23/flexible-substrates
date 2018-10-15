@@ -5,15 +5,14 @@ global colorCount
 
 colorCount = 1;
 
-%%
+%% LINEAR STABILITY
+
 colorCount = 1;
 
 figure('position',[680,558,5*80,5*60]);
 plot_AK_R_long_wave(1); % figure 1
 
 print('figure-1','-depsc')
-
-%%
 
 figure('position',[680,558,5*80,5*60]); % figure 2
 colorCount = 1;
@@ -27,52 +26,110 @@ legend(labels);
 
 print('figure-2','-depsc')
 
-%%
+%% NUMERICAL METHODS
 
 figure('position',[680,558,5*80,5*60]);
 hold on
-plot_dispersion_relation_long_wave(1,1,0,0,0,0,1,0);
-plot_dispersion_relation(1,1,0,0,0,0,1);
-
-print('figure-3','-depsc')
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_phase_speed_long_wave(1,1,0,0,0,0,1,0);
-plot_phase_speed(1,1,0,0,0,0,1);
-
-print('figure-4','-depsc')
-
-%%
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_dispersion_relation_long_wave(1,1,1,1,1,1,1,0);
-plot_dispersion_relation(1,1,1,1,1,1,1);
-
-print('figure-5','-depsc')
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_phase_speed_long_wave(1,1,1,1,1,1,1,0);
+plot_phase_speed_long_wave(1,1,100);
+plot_phase_speed(1,1,1,1,1,1,100);
+plot_phase_speed_long_wave(1,1,10);
+plot_phase_speed(1,1,1,1,1,1,10);
+plot_phase_speed_long_wave(1,1,1);
 plot_phase_speed(1,1,1,1,1,1,1);
+text(0.1,1.8,"A_{K} increasing \rightarrow")
 
-print('figure-6','-depsc')
+print('figure-3a','-depsc')
+
+figure('position',[680,558,5*80,5*60]);
+hold on
+plot_dispersion_relation_long_wave(1,1,100);
+plot_dispersion_relation(1,1,1,1,1,1,100);
+plot_dispersion_relation_long_wave(1,1,10);
+plot_dispersion_relation(1,1,1,1,1,1,10);
+plot_dispersion_relation_long_wave(1,1,1);
+plot_dispersion_relation(1,1,1,1,1,1,1);
+axis([0,inf,-inf,0.4])
+text(0.2,0.1,"A_{K} increasing \uparrow")
+
+print('figure-3b','-depsc')
+
+%%
+figure('position',[680,558,5*80,5*60]);
+hold on
+plot_phase_speed_long_wave(10,1,1);
+plot_phase_speed(10,1,1,1,1,1,1);
+plot_phase_speed_long_wave(5,1,1);
+plot_phase_speed(5,1,1,1,1,1,1);
+plot_phase_speed_long_wave(1,1,1);
+plot_phase_speed(1,1,1,1,1,1,1);
+text(0.1,1.3,"R increasing \downarrow")
+
+print('figure-4a','-depsc')
+%%
+figure('position',[680,558,5*80,5*60]);
+hold on
+plot_dispersion_relation_long_wave(10,1,1);
+plot_dispersion_relation(10,1,1,1,1,1,1);
+plot_dispersion_relation_long_wave(5,1,1);
+plot_dispersion_relation(5,1,1,1,1,1,1);
+plot_dispersion_relation_long_wave(1,1,1);
+plot_dispersion_relation(1,1,1,1,1,1,1);
+axis([0,inf,-inf,0.5])
+text(0.2,0.1,"R increasing \leftarrow")
+
+print('figure-4b','-depsc')
+
+%%
+
+% figure('position',[680,558,5*80,5*60]);
+% hold on
+% plot_dispersion_relation_long_wave(1,1,0,0,0,0,1,0);
+% plot_dispersion_relation(1,1,0,0,0,0,1);
+% 
+% print('figure-5','-depsc')
+% 
+% figure('position',[680,558,5*80,5*60]);
+% hold on
+% plot_phase_speed_long_wave(1,1,0,0,0,0,1,0);
+% plot_phase_speed(1,1,0,0,0,0,1);
+% 
+% print('figure-6','-depsc')
+% 
+% figure('position',[680,558,5*80,5*60]);
+% hold on
+% plot_dispersion_relation_long_wave(1,1,1,1,1,1,1,0);
+% plot_dispersion_relation(1,1,1,1,1,1,1);
+% 
+% print('figure-5','-depsc')
+% 
+% figure('position',[680,558,5*80,5*60]);
+% hold on
+% plot_phase_speed_long_wave(1,1,1,1,1,1,1,0);
+% plot_phase_speed(1,1,1,1,1,1,1);
+% 
+% print('figure-6','-depsc')
 
 %%
 
 figure('position',[680,558,5*80,5*60]); % figure 7
 colorCount = 1;
 hold on;
-plot_AK_R_long_wave(1);
-labels = ["Long wave"];
+plot_neutral_curve_R_AK_long_wave(1);
+labels = strings(4,1);
+labels(1) = "Long wave";
+n = 2;
 for k = [0.1,0.2,0.3]
-    plot_AK_R(k,1,1,1,1,1);
-    labels = [labels, sprintf("\\alpha = %g",k)];
+    plot_neutral_curve_R_AK(k,1,1,1,1,1);
+    labels(n) = sprintf("\\alpha = %g",k);
+    n = n+1;
 end
+clear n;
 axis([-1,3,0,2])
 legend(labels);
 legend('Location','northwest');
+
+text(1.5,0.5,"Stable")
+text(-0.7,0.5,"Unstable")
 
 print('figure-7','-depsc')
 
