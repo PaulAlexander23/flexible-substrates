@@ -9,6 +9,6 @@ function plot_phase_speed_long_wave(R,cotbeta,AK)
     
     plot(k,real(c));
     xlabel('$\alpha$','Interpreter','latex')
-    ylabel('$\Re(c)$','Interpreter','latex')
+    ylabel('$c_r$','Interpreter','latex')
     title('Phase speed')
 end

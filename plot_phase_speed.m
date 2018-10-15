@@ -13,6 +13,6 @@ function plot_phase_speed(R,cotbeta,S,AD,AT,AB,AK)
     
     plot(k,real(c));
     xlabel('$\alpha$','Interpreter','latex')
-    ylabel('$\Re(c)$','Interpreter','latex')
+    ylabel('$c_r$','Interpreter','latex')
     title('Phase speed')
 end

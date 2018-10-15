@@ -9,6 +9,6 @@ function plot_dispersion_relation_long_wave(R,cotbeta,AK)
     
     plot(k,imag(c));
     xlabel('$\alpha$','Interpreter','latex')
-    ylabel('$\Im(c)$','Interpreter','latex')
+    ylabel('$c_i$','Interpreter','latex')
     title('Dispersion relation')
 end
