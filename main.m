@@ -303,19 +303,3 @@ plot_AK_R(0.5,1,1,0.1,1,1);
 plot_AK_R(0.5,1,1,1,1,1);
 
 print('figure-18','-depsc')
-
-%% EIGENFUNCTIONS
-k = 1; R = 1; cotbeta = 1; S = 1; AD = 1; AT = 1; AB = 1; AB = 1; AK = 1;
-[val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK);
-
-y = linspace(0,1)';
-phi = compute_phi(y,vec(:,1:2));
-
-fh = figure();
-plot(phi,y)
-
-title('Eigenfunctions');
-xlabel('$phi$');
-ylabel('y');
-
-%pubgraph(fh,24,2,'w')
