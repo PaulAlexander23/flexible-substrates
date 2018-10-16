@@ -14,7 +14,7 @@ function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
     %
     %S', A_D', A_T', A_B', A_K' are the rescaled versions of the parameters,
     %see page 7 of the paper.
-    M=20+3; %A,B are 2Mx2M, M = number of modes/polynomials + 3
+    M=50+3; %A,B are 2Mx2M, M = number of modes/polynomials + 3
     
     %Construct D and D^2
     I=eye(M);
@@ -31,10 +31,10 @@ function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
     
     %Construct V
     P=zeros(M,M); P(2,1)=1/4; P(3,1)=-1/16; P(2,2)=-1/16;
-    B=[ones(M,1) 3*ones(M,1) ones(M,1)];Q=1/4*(spdiags(B,[-1 0 1],M,M));
-    B=[ones(M,1) zeros(M,1) 2*ones(M,1) zeros(M,1) ones(M,1)]; ...
-        F=-1/16*(spdiags(B,[-2 -1 0 1 2],M,M));
-    
+    Q=1/4*(spdiags([ones(M,1) 3*ones(M,1) ones(M,1)],[-1 0 1],M,M));
+    F=-1/16*(spdiags(...
+        [ones(M,1) zeros(M,1) 2*ones(M,1) zeros(M,1) ones(M,1)],...
+        [-2 -1 0 1 2],M,M));
     V=P+Q+F;
     
     %BCs
