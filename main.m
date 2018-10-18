@@ -9,11 +9,6 @@ colorCount = 1;
 
 colorCount = 1;
 
-figure('position',[680,558,5*80,5*60]);
-plot_AK_R_long_wave(1); % figure 1
-
-print('figure-1','-depsc')
-
 figure('position',[680,558,5*80,5*60]); % figure 2
 colorCount = 1;
 hold on;
@@ -24,7 +19,7 @@ for cotbeta = [0.25,0.5,1,2,4]
 end
 legend(labels);
 
-print('figure-2','-depsc')
+print('figure-1','-depsc')
 
 %% NUMERICAL METHODS
 
@@ -38,7 +33,7 @@ plot_phase_speed_long_wave(1,1,1);
 plot_phase_speed(1,1,1,1,1,1,1);
 text(0.1,1.8,"A_{K} increasing \rightarrow")
 
-print('figure-3a','-depsc')
+print('figure-2a','-depsc')
 
 figure('position',[680,558,5*80,5*60]);
 hold on
@@ -51,9 +46,10 @@ plot_dispersion_relation(1,1,1,1,1,1,1);
 axis([0,inf,-inf,0.4])
 text(0.2,0.1,"A_{K} increasing \uparrow")
 
-print('figure-3b','-depsc')
+print('figure-2b','-depsc')
 
 %%
+
 figure('position',[680,558,5*80,5*60]);
 hold on
 plot_phase_speed_long_wave(10,1,1);
@@ -64,8 +60,8 @@ plot_phase_speed_long_wave(1,1,1);
 plot_phase_speed(1,1,1,1,1,1,1);
 text(0.1,1.3,"R increasing \downarrow")
 
-print('figure-4a','-depsc')
-%%
+print('figure-3a','-depsc')
+
 figure('position',[680,558,5*80,5*60]);
 hold on
 plot_dispersion_relation_long_wave(10,1,1);
@@ -77,37 +73,41 @@ plot_dispersion_relation(1,1,1,1,1,1,1);
 axis([0,inf,-inf,0.5])
 text(0.2,0.1,"R increasing \leftarrow")
 
+print('figure-3b','-depsc')
+
+%%
+
+figure('position',[680,558,5*80,5*60]);
+hold on
+plot_dispersion_relation_long_wave(1,1,1);
+plot_dispersion_relation(1,1,0,0,0,0,1);
+axis([0,inf,0,2])
+
+print('figure-4a','-depsc')
+
+figure('position',[680,558,5*80,5*60]);
+hold on
+plot_phase_speed_long_wave(1,1,1);
+plot_phase_speed(1,1,0,0,0,0,1);
+axis([0,inf,0,10])
+
 print('figure-4b','-depsc')
 
 %%
 
-% figure('position',[680,558,5*80,5*60]);
-% hold on
-% plot_dispersion_relation_long_wave(1,1,0,0,0,0,1,0);
-% plot_dispersion_relation(1,1,0,0,0,0,1);
-% 
-% print('figure-5','-depsc')
-% 
-% figure('position',[680,558,5*80,5*60]);
-% hold on
-% plot_phase_speed_long_wave(1,1,0,0,0,0,1,0);
-% plot_phase_speed(1,1,0,0,0,0,1);
-% 
-% print('figure-6','-depsc')
-% 
-% figure('position',[680,558,5*80,5*60]);
-% hold on
-% plot_dispersion_relation_long_wave(1,1,1,1,1,1,1,0);
-% plot_dispersion_relation(1,1,1,1,1,1,1);
-% 
-% print('figure-5','-depsc')
-% 
-% figure('position',[680,558,5*80,5*60]);
-% hold on
-% plot_phase_speed_long_wave(1,1,1,1,1,1,1,0);
-% plot_phase_speed(1,1,1,1,1,1,1);
-% 
-% print('figure-6','-depsc')
+figure('position',[680,558,5*80,5*60]);
+hold on
+plot_dispersion_relation_long_wave(1,1,1,1,1,1,1,0);
+plot_dispersion_relation(1,1,1,1,1,1,1);
+
+print('figure-5','-depsc')
+
+figure('position',[680,558,5*80,5*60]);
+hold on
+plot_phase_speed_long_wave(1,1,1,1,1,1,1,0);
+plot_phase_speed(1,1,1,1,1,1,1);
+
+print('figure-6','-depsc')
 
 %%
 
