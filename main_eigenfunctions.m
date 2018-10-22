@@ -1,324 +1,111 @@
-%MAIN Driver for the flexible substrates paper
+%% EIGENFUNCTIONS
 
-clear all
-global colorCount
+% Parameters
+%k = 0.3; R = 1; cotbeta = 1; S = 0; AD = 0; AT = 0; AB = 0; AK = 1;AI = 0;
+%k = 0.3; R = 1; cotbeta = 1; S = 1; AD = 1; AT = 1; AB = 1; AK = 1;AI = 0;
+k = 0.5; R = 0.3; cotbeta = 1; S = 1; AD = 0.1; AT = 1; AB = 1; AK = 3; AI = 0;
 
-colorCount = 1;
+% Solve eigenvalue problem
+[val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI);
 
-%% LINEAR STABILITY
+% Construct domain
+y = linspace(0,1).';
 
-figure('position',[680,558,5*80,5*60]); % figure 2
-colorCount = 1;
+% Construct phi for the most unstable mode
+phi = compute_phi(y,vec(:,2));
+c = val(1);
+
+% Construct base solution
+u_bar = y.*(2-y);
+v_bar = 0;
+p_bar = 2*cotbeta/R * (1 - y);
+eta_bar = 0;
+h_bar = 1;
+
+dy = y(2)-y(1);
+D1 = spdiags(ones(100,1)*[-1,1],[0,1],100,100)/dy;
+D3 = spdiags(ones(100,1)*[-1/2,1,-1,1/2],[-2,-1,1,2],100,100)/dy/dy/dy;
+
+% Construct perturbation
+u_hat = ((phi(2:end)-phi(1:end-1))./(y(2:end)-y(1:end-1)));
+v_hat = (-1i*k*phi);
+%p_hat = -(u_bar - c)*diff(phi) + diff(u_bar)*phi + (diff(phi,3) - k^2 * diff(phi))/(1i*k*R);
+eta_hat = (phi(1)/c);
+h_hat = (phi(end)/(c - u_bar(end)));
+p_hat = -(u_bar - c) .* (D1*phi) + (D1*u_bar) .* phi + (D3*phi - k^2 * D1*phi)/(1i*k*R);
+
+% Construct full solution
+u = u_bar(2:end) + u_hat;
+v = v_bar + v_hat;
+%p = p_bar + p_hat;
+eta = eta_bar + eta_hat;
+h = h_bar + h_hat;
+
+display(c)
+display(h)
+display(eta)
+
+%% Plot the result
+
+figure()
+plot_dispersion_relation(R,cotbeta,S,AD,AT,AB,AK,AI,2)
+
+figure()
+plot_phase_speed(R,cotbeta,S,AD,AT,AB,AK,AI,2)
+
+fh = figure();
 hold on;
-labels = [];
-for cotbeta = [0.2,1,5]
-    plot_neutral_curve_R_AK_long_wave(cotbeta);
-    labels = [labels, sprintf("cot(\\beta) = %g",cotbeta)];
-end
-legend(labels);
-text(-0.5,5,'Stable')
-text(2,3,'Unstable')
+plot(y, real(phi));
+plot(y, imag(phi));
+title('Eigenfunctions')
+xlabel('y')
+ylabel('\phi')
+legend('Real','Imag')
 
-print('figure-3','-depsc')
-
-%% NUMERICAL METHODS
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_phase_speed_long_wave(1,1,100);
-plot_phase_speed(1,1,1,1,1,1,100);
-plot_phase_speed_long_wave(1,1,10);
-plot_phase_speed(1,1,1,1,1,1,10);
-plot_phase_speed_long_wave(1,1,1);
-plot_phase_speed(1,1,1,1,1,1,1);
-text(0.1,1.8,"A_{K} increasing \rightarrow")
-
-print('figure-4a','-depsc')
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_dispersion_relation_long_wave(1,1,100);
-plot_dispersion_relation(1,1,1,1,1,1,100);
-plot_dispersion_relation_long_wave(1,1,10);
-plot_dispersion_relation(1,1,1,1,1,1,10);
-plot_dispersion_relation_long_wave(1,1,1);
-plot_dispersion_relation(1,1,1,1,1,1,1);
-axis([0,inf,-inf,0.4])
-text(0.2,0.1,"A_{K} increasing \uparrow")
-
-print('figure-4b','-depsc')
-
-%%
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_phase_speed_long_wave(10,1,1);
-plot_phase_speed(10,1,1,1,1,1,1);
-plot_phase_speed_long_wave(5,1,1);
-plot_phase_speed(5,1,1,1,1,1,1);
-plot_phase_speed_long_wave(1,1,1);
-plot_phase_speed(1,1,1,1,1,1,1);
-text(0.1,1.3,"R increasing \downarrow")
-
-print('figure-4b','-depsc')
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_dispersion_relation_long_wave(10,1,1);
-plot_dispersion_relation(10,1,1,1,1,1,1);
-plot_dispersion_relation_long_wave(5,1,1);
-plot_dispersion_relation(5,1,1,1,1,1,1);
-plot_dispersion_relation_long_wave(1,1,1);
-plot_dispersion_relation(1,1,1,1,1,1,1);
-axis([0,inf,-inf,0.5])
-text(0.2,0.1,"R increasing \leftarrow")
-
-print('figure-4c','-depsc')
-
-%%
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_dispersion_relation_long_wave(1,1,1);
-plot_dispersion_relation(1,1,0,0,0,0,1);
-axis([0,inf,0,2])
-
-print('figure-5a','-depsc')
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_phase_speed_long_wave(1,1,1);
-plot_phase_speed(1,1,0,0,0,0,1);
-axis([0,inf,0,10])
-
-print('figure-5b','-depsc')
-
-%%
-
-figure('position',[680,558,5*80,5*60]); % figure 7
-colorCount = 1;
+fh = figure();
 hold on;
-plot_neutral_curve_R_AK_long_wave(1);
-labels = strings(4,1);
-labels(1) = "Long wave";
-n = 2;
-for k = [0.1,0.2,0.3]
-    plot_neutral_curve_R_AK(k,1,1,1,1,1);
-    labels(n) = sprintf("\\alpha = %g",k);
-    n = n+1;
-end
-clear n;
-axis([-1,3,0,2])
-legend(labels);
-legend('Location','northwest');
+plot(u_hat,y(2:end))
+plot(v_hat,y)
+title('Eigenfunctions velocity');
+xlabel('');
+ylabel('y');
+legend('hat(u)','hat(v)')
+%pubgraph(fh,24,2,.'w.')
 
-text(1.5,0.5,"Stable")
-text(-0.7,0.5,"Unstable")
-
-print('figure-6','-depsc')
-
-%%
-
-figure('position',[680,558,5*80,5*60]);
+fh = figure();
 hold on;
-plot_dispersion_relation(1,1,1,1,1,1,1,20);
-plot_dispersion_relation(1,1,1,1,0,0,1,20);
-plot_dispersion_relation(1,1,1,1,0.1,0.1,1,20);
-text(2,0.3,"\downarrow increasing A_{B} & A_{T}")
+plot(u, y(2:end))
+plot(v, y)
+title('Eigenfunctions velocity');
+xlabel('');
+ylabel('y');
+legend('bar(u) + hat(u)','bar(v) + hat(v)')
 
-print('figure-7a','-depsc')
+%%
 
-figure('position',[680,558,5*80,5*60]);
+x = linspace(0,2*pi/k).';
+t = 0;
+A = 0.5;
+normalmode = A * exp(1i*k*(x-c*t));
+
+ETA = eta_bar.' + normalmode*eta_hat.';
+H = h_bar.' + normalmode*h_hat.';
+
+%U = u_bar(2:end).' + real(normalmode*u_hat.');
+%V = v_bar.' + real(normalmode*v_hat.');
+
+U = real(normalmode*u_hat.');
+V = real(normalmode*v_hat.');
+P = real(normalmode*p_hat.');
+
+PHI = normalmode*phi.';
+
+figure();
 hold on;
-plot_phase_speed(1,1,1,1,1,1,1,20);
-plot_phase_speed(1,1,1,1,0,0,1,20);
-plot_phase_speed(1,1,1,1,0.1,0.1,1,20);
-text(3,1.5,"\downarrow increasing A_{B} & A_{T}")
-
-print('figure-7b','-depsc')
-
-%% NUMERICAL RESULTS
-
-figure('position',[680,558,6*80,5*60]); % figure 9
-colorCount = 1;
-cotbeta = 1;
-S = 1;
-AD = 1;
-AT = 1;
-AB = 1;
-labels = [];
-
-hold on;
-for AK = [0,1,10]
-    plot_neutral_curve_k_R(cotbeta,S,AD,AT,AB,AK);
-    labels = [labels, sprintf("A_K = %g",AK)];
-end
-legend(labels);
-legend('Location','eastoutside');
-
-print('figure-8','-depsc')
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 10
-colorCount = 1;
-cotbeta = 1;
-S = 1;
-AT = 1;
-AB = 1;
-labels = [];
-k = 0.5;
-hold on;
-mywaitbar = waitbar(0);
-for AD = 10.^[-2,-1,0,1,2]
-    plot_neutral_curve_R_AK(k,cotbeta,S,AD,AT,AB);
-    labels = [labels, sprintf("A_D = %g",AD)];
-    waitbar((log2(AD)+3)/9, mywaitbar);
-end
-legend(labels);
-legend('Location','eastoutside');
-text(0,5,'Stable')
-text(1.8,1,'Unstable')
-print('figure-9','-depsc')
-
-mywaitbar.delete;
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 10
-colorCount = 1;
-cotbeta = 1;
-S = 1;
-AT = 1;
-AB = 1;
-AK = 1;
-labels = [];
-
-hold on;
-mywaitbar = waitbar(0);
-for AD = 2.^(-2:2:6)
-    plot_k_R(cotbeta,S,AD,AT,AB,AK);
-    labels = [labels, sprintf("A_D = %g",AD)];
-    waitbar((log2(AD)+3)/9, mywaitbar);
-end
-legend(labels);
-legend('Location','eastoutside');
-
-print('figure-10','-depsc')
-
-mywaitbar.delete;
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 11
-colorCount = 1;
-cotbeta = 1;
-AD = 1;
-AT = 1;
-AB = 1;
-AK = 1;
-labels = [];
-
-hold on;
-for S = 2.^(-2:4)
-    plot_k_R(cotbeta,S,AD,AT,AB,AK);
-    labels = [labels, sprintf("S = %g",S)];
-end
-legend(labels);
-legend('Location','eastoutside');
-
-print('figure-11','-depsc')
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 12
-colorCount = 1;
-cotbeta = 1;
-S = 1;
-AD = 1;
-AB = 1;
-AK = 1;
-labels = [];
-
-hold on;
-for AT = 2.^(-2:4)
-    plot_k_R(cotbeta,S,AD,AT,AB,AK);
-    labels = [labels, sprintf("A_T = %g",AT)];
-end
-legend(labels);
-legend('Location','eastoutside');
-
-print('figure-12','-depsc')
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 13
-colorCount = 1;
-cotbeta = 1;
-S = 1;
-AD = 1;
-AT = 1;
-AK = 1;
-labels = [];
-
-hold on;
-for AB = 2.^(-2:4)
-    plot_k_R(cotbeta,S,AD,AT,AB,AK);
-    labels = [labels, sprintf("A_B = %g",AB)];
-end
-legend(labels);
-legend('Location','eastoutside');
-
-print('figure-13','-depsc')
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 14
-
-plot_dispersion_relation(0.4,1,1,0.1,1,1,3);
-
-print('figure-14','-depsc')
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 15
-
-plot_phase_speed(0.4,1,1,0.1,1,1,3);
-
-print('figure-15','-depsc')
-
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 16
-
-colorCount = 1;
-hold on
-plot_k_R(1,1,0.1,1,1,3);
-plot_k_R(1,1,0.4,1,1,3);
-
-legend('A_D = 0.1','A_D = 0.4','Location','southeast')
-
-print('figure-16','-depsc')
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 17
-
-hold on;
-for AD = linspace(0.1,0.3,9)
-    plot_dispersion_relation(0.4,1,1,AD,1,1,3);
-end
-
-print('figure-17','-depsc')
-
-%%
-
-figure('position',[680,558,6*80,5*60]); % figure 18
-
-colorCount = 1;
-hold on;
-plot_AK_R(0.5,1,1,0.1,1,1);
-plot_AK_R(0.5,1,1,1,1,1);
-
-print('figure-18','-depsc')
+plot(x,H,x,ETA);
+quiver(repmat(x(5:5:end),1,19),repmat(y(6:5:end),1,20).',...
+    U(5:5:end,5:5:end),V(5:5:end,6:5:end));
+%contour(repmat(x(5:10:end),1,10),repmat(y(5:10:end),1,10).',...
+%    sqrt(U(5:10:end,5:10:end).^2+V(5:10:end,5:10:end).^2));
+contour(x,y,...
+    real(PHI)',40);

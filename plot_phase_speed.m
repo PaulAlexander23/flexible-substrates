@@ -1,4 +1,4 @@
-function plot_phase_speed(R,cotbeta,S,AD,AT,AB,AK,kL)
+function plot_phase_speed(R,cotbeta,S,AD,AT,AB,AK,AI,kL)
     %PLOT_PHASE_SPEED
     M = 200;
     if(nargin<8)
@@ -9,7 +9,7 @@ function plot_phase_speed(R,cotbeta,S,AD,AT,AB,AK,kL)
     c = zeros(M,numberOfModes);
     
     parfor j = 1:M
-        e = compute_OS_eigs(k(j),R,cotbeta,S,AD,AT,AB,AK);
+        e = compute_OS_eigs(k(j),R,cotbeta,S,AD,AT,AB,AK,AI);
         c(j,:) = e(1:numberOfModes);
     end
     

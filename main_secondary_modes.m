@@ -9,7 +9,7 @@ colorCount = 1;
 
 figure('position',[680,558,6*80,5*60]);
 
-plot_neutral_curve_k_R(1,1,0.1,1,1,3,2);
+plot_neutral_curve_k_R(1,1,0.1,1,1,3,0,2);
 text(2.5,2,'Stable')
 text(2.5,0.5,'Unstable')
 
@@ -19,7 +19,7 @@ print('secondary-modes-1','-depsc')
 
 figure('position',[680,558,6*80,5*60]);
 
-plot_neutral_curve_R_AK(0.5,1,1,0.1,1,1,2);
+plot_neutral_curve_R_AK(0.5,1,1,0.1,1,1,0,2);
 text(2,1,'Stable')
 text(0.5,4,'Unstable')
 text(-1,3,'Unstable')
@@ -31,7 +31,7 @@ print('secondary-modes-2','-depsc')
 
 figure('position',[680,558,6*80,5*60]);
 %k,cotbeta,S,AK,AT,AB,numberOfModes
-plot_neutral_curve_R_AD(0.5,1,1,3,1,1,5);
+plot_neutral_curve_R_AD(0.5,1,1,3,1,1,0,5);
 text(0,-1,'Stable')
 text(-1,2,'Unstable')
 legend('Largest mode','Secondary mode')

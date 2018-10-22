@@ -1,4 +1,4 @@
-function [ci, AK, R] = plot_neutral_curve_R_AK(k,cotbeta,S,AD,AT,AB,numberOfModes)
+function [ci, AK, R] = plot_neutral_curve_R_AK(k,cotbeta,S,AD,AT,AB,AI,numberOfModes)
     %PLOT_NEUTRAL_CURVE_R_AK
     RN = 100;
     RL = 5;
@@ -12,7 +12,7 @@ function [ci, AK, R] = plot_neutral_curve_R_AK(k,cotbeta,S,AD,AT,AB,numberOfMode
     
     parfor j = 1:RN
         for n = 1:AKN
-            val = imag(compute_OS_eigs(k,R(j),cotbeta,S,AD,AT,AB,AK(n)));
+            val = imag(compute_OS_eigs(k,R(j),cotbeta,S,AD,AT,AB,AK(n),AI));
             ci(j,n,:) = val(1:numberOfModes);
         end
     end

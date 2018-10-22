@@ -1,4 +1,4 @@
-function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
+function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI)
     %COMPUTE_OS_EIGS Solution of the Orr-Sommerfeld eigenvalue problem for the complex wave
     %speed c(k,...) = cr + i*ci
     %Outputs a vector of sorted eigenvalues, and a matric of eigenvectors.
@@ -58,12 +58,14 @@ function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
     a4c=zeros(1,M);
     b4c=-2*b3f;
     
+    e4f=1i*k^3*AI*(-1).^((1:M)+1);
+    
     %Trim D2,I,V by 2 rows
     D2=D2(1:M-2,:);
     I=I(1:M-2,:);
     V=V(1:M-2,:);
     
-    %Construct A and B
+    %Construct A and B and E in c^2*Ex+Ax=cBx
     A=[4*D2-k^2*I -I;...
         -2*1i*k*R*I 4*D2-k^2*I-1i*k*R*V;...
         a1f a1c;...
@@ -76,27 +78,29 @@ function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK)
         b2f b2c;...
         b3f b3c;...
         b4f b4c];
+    E=[zeros(2*M-1,2*M); e4f zeros(1,M)];
     
-    %Solve eigenvalue problem A*x=c*B*x
-    [vec, val]=eig(A,B,'vector');
+   
+    %Solve eigenvalue problem c^2*Ex-cBx+Ax=0
+    [vec, val] = polyeig(A,-B,E);
     
     %Compute residual
-    residual = (sum(abs((A*vec - B*vec*diag(val))).^2).^0.5)';
+    residual = (sum(abs((A*vec - B*vec*diag(val)+ E*vec*diag(val.^2))).^2).^0.5)';
     
     %Filter results
-    %upper_threshold = 1e6; %1e6
-    %index = abs(val) < upper_threshold;
-    %val = val(index);
-    %vec = vec(:,index);
-    %residual = residual(index);
+    upper_threshold = 1e6; %1e6
+    index = abs(val) < upper_threshold;
+    val = val(index);
+    vec = vec(:,index);
+    residual = residual(index);
     
-    lower_threshold = 1e-8; %1e-8
+    lower_threshold = 1e-5; %1e-8
     index = abs(val) > lower_threshold;
     val = val(index);
     vec = vec(:,index);
     residual = residual(index);
     
-    residual_threshold = 1e-3; %1e-3
+    residual_threshold = 1e-8; %1e-3
     index = residual<residual_threshold;
     val = val(index);
     vec = vec(:,index);
