@@ -1,7 +1,9 @@
-function plot_dispersion_relation_long_wave(R,cotbeta,AK)
+function plot_dispersion_relation_long_wave(R,cotbeta,AK,kL)
     %PLOT_DISPERSION_RELATION_LONG_WAVE
     M = 2;
-    kL = 0.5;
+    if(nargin<8)
+        kL = 0.5;
+    end
     k = linspace(0,kL,M);
     
     c = compute_long_wave(k,R,cotbeta,0,0,0,0,AK,0);

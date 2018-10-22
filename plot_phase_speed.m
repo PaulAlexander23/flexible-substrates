@@ -1,7 +1,9 @@
-function plot_phase_speed(R,cotbeta,S,AD,AT,AB,AK)
+function plot_phase_speed(R,cotbeta,S,AD,AT,AB,AK,kL)
     %PLOT_PHASE_SPEED
     M = 200;
-    kL = 0.5;
+    if(nargin<8)
+        kL = 0.5;
+    end
     k = linspace(kL/M,kL,M);
     numberOfModes = 1;
     c = zeros(M,numberOfModes);
