@@ -7,19 +7,19 @@ colorCount = 1;
 
 %% LINEAR STABILITY
 
-colorCount = 1;
-
 figure('position',[680,558,5*80,5*60]); % figure 2
 colorCount = 1;
 hold on;
 labels = [];
-for cotbeta = [0.25,0.5,1,2,4]
-    plot_AK_R_long_wave(cotbeta);
+for cotbeta = [0.2,1,5]
+    plot_neutral_curve_R_AK_long_wave(cotbeta);
     labels = [labels, sprintf("cot(\\beta) = %g",cotbeta)];
 end
 legend(labels);
+text(-0.5,5,'Stable')
+text(2,3,'Unstable')
 
-print('figure-1','-depsc')
+print('figure-3','-depsc')
 
 %% NUMERICAL METHODS
 
@@ -33,7 +33,7 @@ plot_phase_speed_long_wave(1,1,1);
 plot_phase_speed(1,1,1,1,1,1,1);
 text(0.1,1.8,"A_{K} increasing \rightarrow")
 
-print('figure-2a','-depsc')
+print('figure-4a','-depsc')
 
 figure('position',[680,558,5*80,5*60]);
 hold on
@@ -46,7 +46,7 @@ plot_dispersion_relation(1,1,1,1,1,1,1);
 axis([0,inf,-inf,0.4])
 text(0.2,0.1,"A_{K} increasing \uparrow")
 
-print('figure-2b','-depsc')
+print('figure-4b','-depsc')
 
 %%
 
@@ -60,7 +60,7 @@ plot_phase_speed_long_wave(1,1,1);
 plot_phase_speed(1,1,1,1,1,1,1);
 text(0.1,1.3,"R increasing \downarrow")
 
-print('figure-3a','-depsc')
+print('figure-4b','-depsc')
 
 figure('position',[680,558,5*80,5*60]);
 hold on
@@ -73,7 +73,7 @@ plot_dispersion_relation(1,1,1,1,1,1,1);
 axis([0,inf,-inf,0.5])
 text(0.2,0.1,"R increasing \leftarrow")
 
-print('figure-3b','-depsc')
+print('figure-4c','-depsc')
 
 %%
 
@@ -83,7 +83,7 @@ plot_dispersion_relation_long_wave(1,1,1);
 plot_dispersion_relation(1,1,0,0,0,0,1);
 axis([0,inf,0,2])
 
-print('figure-4a','-depsc')
+print('figure-5a','-depsc')
 
 figure('position',[680,558,5*80,5*60]);
 hold on
@@ -91,23 +91,7 @@ plot_phase_speed_long_wave(1,1,1);
 plot_phase_speed(1,1,0,0,0,0,1);
 axis([0,inf,0,10])
 
-print('figure-4b','-depsc')
-
-%%
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_dispersion_relation_long_wave(1,1,1,1,1,1,1,0);
-plot_dispersion_relation(1,1,1,1,1,1,1);
-
-print('figure-5','-depsc')
-
-figure('position',[680,558,5*80,5*60]);
-hold on
-plot_phase_speed_long_wave(1,1,1,1,1,1,1,0);
-plot_phase_speed(1,1,1,1,1,1,1);
-
-print('figure-6','-depsc')
+print('figure-5b','-depsc')
 
 %%
 
@@ -131,19 +115,29 @@ legend('Location','northwest');
 text(1.5,0.5,"Stable")
 text(-0.7,0.5,"Unstable")
 
-print('figure-7','-depsc')
+print('figure-6','-depsc')
 
 %%
 
-figure('position',[680,558,5*80,5*60]); % figure 8
+figure('position',[680,558,5*80,5*60]);
+hold on;
+plot_dispersion_relation(1,1,1,1,1,1,1,20);
+plot_dispersion_relation(1,1,1,1,0,0,1,20);
+plot_dispersion_relation(1,1,1,1,0.1,0.1,1,20);
+text(2,0.3,"\downarrow increasing A_{B} & A_{T}")
 
-colorCount = 1;
+print('figure-7a','-depsc')
 
-plot_k_R(1,1,1,1,1,1);
+figure('position',[680,558,5*80,5*60]);
+hold on;
+plot_phase_speed(1,1,1,1,1,1,1,20);
+plot_phase_speed(1,1,1,1,0,0,1,20);
+plot_phase_speed(1,1,1,1,0.1,0.1,1,20);
+text(3,1.5,"\downarrow increasing A_{B} & A_{T}")
 
-print('figure-8','-depsc')
+print('figure-7b','-depsc')
 
-%%
+%% NUMERICAL RESULTS
 
 figure('position',[680,558,6*80,5*60]); % figure 9
 colorCount = 1;
@@ -155,14 +149,39 @@ AB = 1;
 labels = [];
 
 hold on;
-for AK = 2.^(-2:4)
-    plot_k_R(cotbeta,S,AD,AT,AB,AK);
+for AK = [0,1,10]
+    plot_neutral_curve_k_R(cotbeta,S,AD,AT,AB,AK);
     labels = [labels, sprintf("A_K = %g",AK)];
 end
 legend(labels);
 legend('Location','eastoutside');
 
+print('figure-8','-depsc')
+
+%%
+
+figure('position',[680,558,6*80,5*60]); % figure 10
+colorCount = 1;
+cotbeta = 1;
+S = 1;
+AT = 1;
+AB = 1;
+labels = [];
+k = 0.5;
+hold on;
+mywaitbar = waitbar(0);
+for AD = 10.^[-2,-1,0,1,2]
+    plot_neutral_curve_R_AK(k,cotbeta,S,AD,AT,AB);
+    labels = [labels, sprintf("A_D = %g",AD)];
+    waitbar((log2(AD)+3)/9, mywaitbar);
+end
+legend(labels);
+legend('Location','eastoutside');
+text(0,5,'Stable')
+text(1.8,1,'Unstable')
 print('figure-9','-depsc')
+
+mywaitbar.delete;
 
 %%
 
