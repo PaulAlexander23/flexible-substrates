@@ -1,11 +1,13 @@
-function plot_dispersion_relation(R,cotbeta,S,AD,AT,AB,AK,AI,kL)
+function plot_dispersion_relation(R,cotbeta,S,AD,AT,AB,AK,AI,kL,numberOfModes)
     %PLOT_DISPERSION_RELATION
     M = 200; % 200
-    if(nargin<8)
+    if(nargin<9)
         kL = 0.5;
     end
     k = linspace(kL/M,kL,M);
-    numberOfModes = 1;
+    if(nargin<10)
+        numberOfModes = 1;
+    end
     c = zeros(M,numberOfModes);
     
     parfor j = 1:M
