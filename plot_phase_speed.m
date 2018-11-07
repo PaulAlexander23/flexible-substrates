@@ -1,16 +1,18 @@
-function plot_phase_speed(R,cotbeta,S,AD,AT,AB,AK,AI,kL)
+function plot_phase_speed(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes)
     %PLOT_PHASE_SPEED
     M = 200;
-    if(nargin<8)
+    if(nargin<10)
         kL = 0.5;
     end
+    if(nargin<11)
+        modes = 1;
+    end
+    
     k = linspace(kL/M,kL,M);
-    numberOfModes = 1;
-    c = zeros(M,numberOfModes);
+    c = nan(M,modes);
     
     parfor j = 1:M
-        e = compute_OS_eigs(k(j),R,cotbeta,S,AD,AT,AB,AK,AI);
-        c(j,:) = e(1:numberOfModes);
+        c(j,:) = compute_c_switchboard(method,k(j),R,cotbeta,S,AD,AT,AB,AK,AI,modes)
     end
     
     plot(k,real(c),'k');

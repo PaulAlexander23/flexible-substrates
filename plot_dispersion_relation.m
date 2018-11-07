@@ -1,18 +1,18 @@
-function plot_dispersion_relation(R,cotbeta,S,AD,AT,AB,AK,AI,kL,numberOfModes)
+function plot_dispersion_relation(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes)
     %PLOT_DISPERSION_RELATION
-    M = 200; % 200
-    if(nargin<9)
+    M = 200;
+    if(nargin<10)
         kL = 0.5;
     end
-    k = linspace(kL/M,kL,M);
-    if(nargin<10)
-        numberOfModes = 1;
+    if(nargin<11)
+        modes = 1;
     end
-    c = zeros(M,numberOfModes);
+    
+    k = linspace(kL/M,kL,M);
+    c = zeros(M,modes);
     
     parfor j = 1:M
-        e = compute_OS_eigs(k(j),R,cotbeta,S,AD,AT,AB,AK,AI);
-        c(j,:) = e(1:numberOfModes);
+        c(j,:) = compute_c_switchboard(method,k(j),R,cotbeta,S,AD,AT,AB,AK,AI,modes)
     end
     
     plot(k,imag(c),'k');
