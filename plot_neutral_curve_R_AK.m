@@ -1,23 +1,25 @@
-function [ci, AK, R] = plot_neutral_curve_R_AK(k,cotbeta,S,AD,AT,AB,AI,numberOfModes)
+function [ci, AK, R] = plot_neutral_curve_R_AK(method,k,cotbeta,S,AD,AT,AB,AI,modes)
     %PLOT_NEUTRAL_CURVE_R_AK
-    RN = 100;
+    if nargin < 9
+        modes = 1;
+    end
+    
+    RN = 50;
     RL = 5;
     R = linspace(0,RL,RN);
-    AKN = 100;
+    AKN = 50;
     AK = logspace(-2,3,AKN);
-    if nargin < 7
-        numberOfModes = 1;
-    end
-    ci = zeros(RN,AKN,numberOfModes);
     
-    parfor j = 1:RN
+    ci = zeros(RN,AKN,modes);
+    
+    for j = 1:RN
         for n = 1:AKN
-            val = imag(compute_OS_eigs(k,R(j),cotbeta,S,AD,AT,AB,AK(n),AI));
-            ci(j,n,:) = val(1:numberOfModes);
+            ci(j,n,:) = imag(compute_c_switchboard(method,k,R(j),cotbeta,S,AD,AT,AB,AK(n),AI,modes));
         end
     end
+    
     hold on;
-    for n = 1:numberOfModes
+    for n = 1:modes
         contour_single(log10(AK), R, ci(:,:,n));
     end
     xlabel('log_{10}(A_K)');
