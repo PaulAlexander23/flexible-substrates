@@ -1,41 +1,53 @@
-function [ci, AK, R] = plot_neutral_curve(k,R,cotbeta,S,AD,AT,AB,AK,AI,numberOfModes)
-    %PLOT_NEUTRAL_CURVE_R_AK
-    
-    if arg(1) == "k" && arg(2) == "R"
-        func = @(x,y) imag(compute_OS_eigs(x,y,cotbeta,S,AD,AT,AB,AK,AI));
-    elseif arg(1) == "R" && arg(2) == "AK"
-        func = @(x,y) imag(compute_OS_eigs(k,x,cotbeta,S,AD,AT,AB,y,AI));
-    elseif arg(1) == "R" && arg(2) == "AD"
-        func = @(x,y) imag(compute_OS_eigs(k,x,cotbeta,S,AD,AT,AB,y,AI));
-    elseif arg(1) == "R" && arg(2) == "AI"
-        func = @(x,y) imag(compute_OS_eigs(k,x,cotbeta,S,AD,AT,AB,y,AI));
+function [c, x, y] = plot_neutral_curve(method,k,R,cotbeta,S,AD,AT,AB,AK,AI,modes)
+    %PLOT_NEUTRAL_CURVE
+    if nargin < 8
+        modes = 1;
     end
     
-    xN = 100;
-    xL = 5;
-    x = linspace(0,xL,xN);
-    yN = 100;
-    y = logspace(-2,3,yN);
+    inputs = {k,R,cotbeta,S,AD,AT,AB,AK,AI};
     
-    if nargin < 7
-        numberOfModes = 1;
-    end
+    xN = 0;
+    yN = 0;
     
-    ci = zeros(xN,yN,numberOfModes);
-    
-    parfor j = 1:xN
-        for n = 1:yN
-            val = func(x(n),y(n));
-            ci(j,n,:) = val(1:numberOfModes);
+    for index = 1:length(inputs)
+        len = length(inputs{index});
+        if len > 1
+            if (xN == 0)
+                xN = len;
+                xI = index;
+                continue;
+            end
+            if(yN == 0)
+                yN = len;
+                yI = index;
+                break;
+            end
         end
     end
     
-    hold on;
+    x = inputs{xI};
+    y = inputs{yI};
     
-    for n = 1:numberOfModes
-        contour_single(log10(x), y, ci(:,:,n));
+    C = zeros(length(inputs),1);
+    for index = 1:length(C)
+        if (index ~= xI) && (index ~= yI)
+            C(index) = inputs{index};
+        end
     end
     
-    xlabel(arg(1));
-    ylabel(arg(2));
+    c = zeros(xN,yN,modes);
+    
+    for xi = 1:xN
+        for yi = 1:yN
+            C(xI) = inputs{xI}(xi);
+            C(yI) = inputs{yI}(yi);
+            k = C(1); R = C(2); cotbeta = C(3); S = C(4); AD = C(5); AT = C(6); AB = C(7); AK = C(8); AI = C(9); 
+            c(xi,yi,:) = imag(compute_c_switchboard(method,k,R,cotbeta,S,AD,AT,AB,AK,AI,modes));
+        end
+    end
+    hold on;
+    for modei = 1:modes
+        contour_single(x, y, c(:,:,modei));
+    end
+
 end
