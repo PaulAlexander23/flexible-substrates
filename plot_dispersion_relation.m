@@ -1,4 +1,4 @@
-function plot_dispersion_relation(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes)
+function plot_dispersion_relation(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes,varargin)
     %PLOT_DISPERSION_RELATION
     M = 200;
     if(nargin<10)
@@ -15,7 +15,7 @@ function plot_dispersion_relation(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes)
         c(j,:) = compute_c_switchboard(method,k(j),R,cotbeta,S,AD,AT,AB,AK,AI,modes)
     end
     
-    plot(k,imag(c),'k');
+    plot(k,imag(c),varargin{:});
     xlabel('$\alpha$','Interpreter','latex')
     ylabel('$c_i$','Interpreter','latex')
     title('Dispersion relation')

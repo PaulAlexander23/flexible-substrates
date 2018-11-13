@@ -30,3 +30,9 @@ octave-workspace
 # Maple save
 *.bak.sav
 
+# Figure files
+*.eps
+*.fig
+
+# Hidden files
+.*
