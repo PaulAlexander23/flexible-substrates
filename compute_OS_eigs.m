@@ -78,7 +78,8 @@ function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI)
         b2f b2c;...
         b3f b3c;...
         b4f b4c];
-    E=[zeros(2*M-1,2*M); e4f zeros(1,M)];
+    E=[zeros(2*M-1,2*M);...
+        e4f zeros(1,M)];
     
    
     %Solve eigenvalue problem c^2*Ex-cBx+Ax=0
