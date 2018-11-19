@@ -10,6 +10,7 @@ function out = compute_c_switchboard(method, k,R,cotbeta,S,AD,AT,AB,AK,AI,modes)
         out(1:min(modes,length(vec))) = vec(1:min(modes,length(vec)));
     elseif (method == "longwave") || (method == "l")
         out(1) = compute_long_wave(k,R,cotbeta,0,0,0,0,AK,0);
+        %out(1) = compute_long_wave(k,R,cotbeta,S,AD,AT,AB,AK,AI);
         %out =
         %compute_long_wave(k,R,cotbeta,S*(k.^2),AD*(k),AT*(k.^2),AB*(k.^4),AK,AI*(k.^2));
         % ^^ rescaled
