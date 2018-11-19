@@ -1,4 +1,4 @@
-function plot_phase_speed(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes)
+function plot_phase_speed(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes,varargin)
     %PLOT_PHASE_SPEED
     M = 200;
     if(nargin<10)
@@ -15,7 +15,7 @@ function plot_phase_speed(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes)
         c(j,:) = compute_c_switchboard(method,k(j),R,cotbeta,S,AD,AT,AB,AK,AI,modes)
     end
     
-    plot(k,real(c),'k');
+    plot(k,real(c),varargin{:});
     xlabel('$\alpha$','Interpreter','latex')
     ylabel('$c_r$','Interpreter','latex')
     title('Phase speed')
