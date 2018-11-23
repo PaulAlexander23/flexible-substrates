@@ -35,14 +35,14 @@ function [c, x, y] = plot_neutral_curve(method,k,R,cotbeta,S,AD,AT,AB,AK,AI,mode
         end
     end
     
-    c = zeros(xN,yN,modes);
+    c = zeros(yN,xN,modes);
     
-    for xi = 1:xN
+    parfor xi = 1:xN
         for yi = 1:yN
-            C(xI) = inputs{xI}(xi);
-            C(yI) = inputs{yI}(yi);
-            k = C(1); R = C(2); cotbeta = C(3); S = C(4); AD = C(5); AT = C(6); AB = C(7); AK = C(8); AI = C(9); 
-            c(xi,yi,:) = imag(compute_c_switchboard(method,k,R,cotbeta,S,AD,AT,AB,AK,AI,modes));
+            B = C;
+            B(xI) = inputs{xI}(xi);
+            B(yI) = inputs{yI}(yi);
+            c(yi,xi,:) = imag(compute_c_switchboard(method,B(1),B(2),B(3),B(4),B(5),B(6),B(7),B(8),B(9),modes));
         end
     end
     hold on;
