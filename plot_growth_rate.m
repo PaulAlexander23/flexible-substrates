@@ -1,6 +1,10 @@
 function plot_growth_rate(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes,varargin)
     %PLOT_GROWTH_RATE
-    M = 1000;
+    if method == "n"
+        M = 20;
+    else
+        M = 1000;
+    end
     if(nargin<10)
         kL = 0.5;
     end
@@ -16,6 +20,6 @@ function plot_growth_rate(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes,varargin)
     end
     plot(k,k'.*imag(c),varargin{:});
     xlabel('$\alpha$','Interpreter','latex')
-    ylabel('$c_i$','Interpreter','latex')
+    ylabel('$\omega_i$','Interpreter','latex')
     title('Growth rate')
 end
