@@ -1,4 +1,4 @@
-function [c, x, y] = plot_neutral_curve(method,k,R,cotbeta,S,AD,AT,AB,AK,AI,modes)
+function [c, x, y] = plot_neutral_curve(method,k,R,cotbeta,S,AD,AT,AB,AK,AI,modes,varargin)
     %PLOT_NEUTRAL_CURVE
     if nargin < 8
         modes = 1;
@@ -47,7 +47,7 @@ function [c, x, y] = plot_neutral_curve(method,k,R,cotbeta,S,AD,AT,AB,AK,AI,mode
     end
     hold on;
     for modei = 1:modes
-        contour_single(x, y, c(:,:,modei));
+        contour_single(x, y, c(:,:,modei), varargin{:});
     end
 
 end

@@ -1,4 +1,4 @@
-function out = contour_single(x, y, Z)
+function out = contour_single(x, y, Z, varargin)
     %CONTOUR_SINGLE Plots a single contour line and changes the colour for
     %the next one. 7 distinct colours
     global colorCount
@@ -7,7 +7,7 @@ function out = contour_single(x, y, Z)
     end
     
     colors = get(gca,'colororder');
-    out = contour(x, y, Z, [0 0], 'Linecolor', colors(colorCount,:));
+    out = contour(x, y, Z, [0 0], varargin{:}, 'Linecolor', colors(colorCount,:));
     
     colorCount = 1+mod(colorCount,7);
 end
