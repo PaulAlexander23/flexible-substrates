@@ -1,7 +1,7 @@
 function plot_growth_rate(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes,varargin)
     %PLOT_GROWTH_RATE
     if method == "n"
-        M = 20;
+        M = 40;
     else
         M = 1000;
     end
@@ -12,13 +12,14 @@ function plot_growth_rate(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes,varargin)
         modes = 1;
     end
     
-    k = linspace(kL/M,kL,M);
+    k = linspace(min(1e-5,kL/M),kL,M);
     c = zeros(M,modes);
     
     parfor j = 1:M
         c(j,:) = compute_c_switchboard(method,k(j),R,cotbeta,S,AD,AT,AB,AK,AI,modes)
     end
-    plot(k,k'.*imag(c),varargin{:});
+
+    plot(k,k'.*imag(c),varargin{:},'LineWidth',2);
     xlabel('$\alpha$','Interpreter','latex')
     ylabel('$\omega_i$','Interpreter','latex')
     title('Growth rate')

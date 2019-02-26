@@ -7,7 +7,7 @@ function out = contour_single(x, y, Z, varargin)
     end
     
     colors = get(gca,'colororder');
-    out = contour(x, y, Z, [0 0], varargin{:}, 'Linecolor', colors(colorCount,:));
+    out = contour(x, y, Z, [0 0], varargin{:}, 'Linecolor', colors(colorCount,:),'LineWidth',2);
     
     colorCount = 1+mod(colorCount,7);
 end
