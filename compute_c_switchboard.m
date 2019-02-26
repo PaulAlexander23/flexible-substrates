@@ -13,6 +13,8 @@ function out = compute_c_switchboard(method, k,R,cotbeta,S,AD,AT,AB,AK,AI,modes)
         vec = compute_long_wave(k,R,cotbeta,S*(k.^2),AD*(k),AT*(k.^2),AB*(k.^4),AK,AI*(k.^2));
     elseif (method == "zeroreynolds") || (method == "z")
         vec = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
+    elseif (method == "zeroreynoldspoly") || (method == "p")
+        vec = compute_zero_reynolds_poly_solve(k,cotbeta,S,AD,AT,AB,AK);
     end
     out(1:min(modes,length(vec))) = vec(1:min(modes,length(vec)));
 end
