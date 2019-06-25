@@ -1,5 +1,5 @@
 function phi = compute_phi(y,vec)
-   %COMPUTE_Y
+   %COMPUTE_PHI
    N = size(vec,1)/2 - 3;
    T = zeros(length(y),N+3);
    
