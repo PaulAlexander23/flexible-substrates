@@ -19,7 +19,7 @@ function plot_phase_speed(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes,varargin)
         c(j,:) = compute_c_switchboard(method,k(j),R,cotbeta,S,AD,AT,AB,AK,AI,modes)
     end
     
-    plot(k,sort(real(c),2),varargin{:},'LineWidth',2);
+    plot(k,sort(real(c),2),varargin{:},'LineWidth',1.1);
     xlabel('$\alpha$','Interpreter','latex')
     ylabel('$c_r$','Interpreter','latex')
     title('Phase speed')

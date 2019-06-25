@@ -19,7 +19,7 @@ function plot_dispersion_relation(method,R,cotbeta,S,AD,AT,AB,AK,AI,kL,modes,var
         c(j,:) = compute_c_switchboard(method,k(j),R,cotbeta,S,AD,AT,AB,AK,AI,modes)
     end
     
-    plot(k,imag(c),varargin{:},'LineWidth',2);
+    plot(k,imag(c),varargin{:},'LineWidth',1.1);
     xlabel('$\alpha$','Interpreter','latex')
     ylabel('$c_i$','Interpreter','latex')
     title('Dispersion relation')
