@@ -4,7 +4,7 @@ function out = compute_c_switchboard(method, k,R,cotbeta,S,AD,AT,AB,AK,AI,modes)
     %       "numerical" or "n" - numerical method,
     %       "longwave" or "l" - longwave solution,
     %       "zeroreynolds" or "z" - Zero Reynolds number solution.
-    out = nan(modes,1) + nan(modes,1)*1i;
+    out = nan(1,modes) + nan(1,modes)*1i;
     if (method == "numerical") || (method == "n")
         vec = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI);
     elseif (method == "longwave") || (method == "l")
@@ -15,6 +15,8 @@ function out = compute_c_switchboard(method, k,R,cotbeta,S,AD,AT,AB,AK,AI,modes)
         vec = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
     elseif (method == "zeroreynoldspoly") || (method == "p")
         vec = compute_zero_reynolds_poly_solve(k,cotbeta,S,AD,AT,AB,AK);
+    else
+        error("Unknown method.");
     end
     out(1:min(modes,length(vec))) = vec(1:min(modes,length(vec)));
 end
