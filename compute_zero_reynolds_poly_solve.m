@@ -9,5 +9,5 @@ function out = compute_zero_reynolds_poly_solve(k, cotbeta, S, AD, AT, AB, AK)
     out = roots(eqn);
     
     [~,index] = sort(imag(out),'descend');
-    out = out(index);
+    out = out(index).';
 end
