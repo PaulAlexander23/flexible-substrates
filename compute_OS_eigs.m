@@ -112,4 +112,6 @@ function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI)
     val = val(index);
     vec = vec(:,index);
     residual = residual(index);
+    
+    val = val.';
 end
