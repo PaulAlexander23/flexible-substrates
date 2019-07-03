@@ -1,4 +1,4 @@
-function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI)
+function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI,numberOfPolynomials)
     %COMPUTE_OS_EIGS Solution of the Orr-Sommerfeld eigenvalue problem for the complex wave
     %speed c(k,...) = cr + i*ci
     %Outputs a vector of sorted eigenvalues, and a matric of eigenvectors.
@@ -14,7 +14,8 @@ function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI)
     %
     %S', A_D', A_T', A_B', A_K' are the rescaled versions of the parameters,
     %see page 7 of the paper.
-    M=50+3; %A,B are 2Mx2M, M = number of modes/polynomials + 3
+    
+    M=numberOfPolynomials+3; %A,B are 2Mx2M, M = number of modes/polynomials + 3
     
     %Construct D and D^2
     I=eye(M);
