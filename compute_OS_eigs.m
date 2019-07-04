@@ -82,37 +82,22 @@ function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI,num
     E=[zeros(2*M-1,2*M);...
         e4f zeros(1,M)];
     
-   
+    
     %Solve eigenvalue problem c^2*Ex-cBx+Ax=0
     [vec, val] = polyeig(A,-B,E);
     
-    %Compute residual
-    residual = (sum(abs((A*vec - B*vec*diag(val)+ E*vec*diag(val.^2))).^2).^0.5)';
-    
     %Filter results
-    upper_threshold = 1e6; %1e6
-    index = abs(val) < upper_threshold;
-    val = val(index);
-    vec = vec(:,index);
-    residual = residual(index);
-    
-    lower_threshold = 1e-5; %1e-8
-    index = abs(val) > lower_threshold;
-    val = val(index);
-    vec = vec(:,index);
-    residual = residual(index);
-    
-    residual_threshold = 1e-8; %1e-3
-    index = residual<residual_threshold;
-    val = val(index);
-    vec = vec(:,index);
-    residual = residual(index);
+    val(isinf(val)) = nan + nan*1i;
+    val(abs(val)>1e6) = nan + nan*1i;
+    val(abs(val)<1e-11) = nan + nan*1i;
     
     %Sort results
-    [~,index] = sort(imag(val),'descend');
+    [~,index] = sort(imag(val),'descend','MissingPlacement','last');
     val = val(index);
     vec = vec(:,index);
-    residual = residual(index);
+    
+    %Compute residual
+    residual = (sum(abs((A*vec - B*vec*diag(val)+ E*vec*diag(val.^2))).^2).^0.5)';
     
     val = val.';
 end
