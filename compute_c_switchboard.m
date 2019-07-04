@@ -6,7 +6,7 @@ function out = compute_c_switchboard(method, k,R,cotbeta,S,AD,AT,AB,AK,AI,modes)
     %       "zeroreynolds" or "z" - Zero Reynolds number solution.
     out = nan(1,modes) + nan(1,modes)*1i;
     if (method == "numerical") || (method == "n")
-        vec = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+        vec = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
     elseif (method == "longwave") || (method == "l")
         vec = compute_long_wave(k,R,cotbeta,0,0,0,0,AK,0);
     elseif (method == "scaled longwave") || (method == "s")

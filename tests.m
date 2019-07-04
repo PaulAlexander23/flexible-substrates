@@ -66,26 +66,24 @@ end
 function testNumerical(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
-    
-    actual = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+    modes = 5;
+    actual = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
     expected = 1.0e+02 * [ ...
         0.011733305393037 + 0.001627690450129i, ...
         0.017151795941829 - 0.004392464293491i, ...
         -0.009111783956488 - 0.007810596242121i, ...
         0.003093425553740 - 0.056103531413731i, ...
-        0.005866385981105 - 0.221084577367044i, ...
-        0.006527133285721 - 1.208370110977640i, ...
-        0.006578486471537 - 2.002459220568536i];
+        0.005866385981105 - 0.221084577367044i];
     
-    verifySize(testCase, actual, [1, 7]);
-    verifyEqual(testCase, actual, expected,'AbsTol',1e-13);
+    verifySize(testCase, actual(1:modes), [1, modes]);
+    verifyEqual(testCase, actual(1:modes), expected,'AbsTol',1e-7);
 end
 
 function testNumericalMatchesLongWaveForSmallK(testCase)
     k = 0.01; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     
-    numerical = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
     longwave = compute_long_wave(k,R,cotbeta,0,0,0,0,AK,0);
     
     verifyEqual(testCase, numerical(1), longwave, 'AbsTol', 1e-3, 'RelTol', 1e-4)
@@ -95,7 +93,7 @@ function testNumericalMatchesZeroReynolds(testCase)
     k = 1; R = 0; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     
-    numerical = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
     zeroReynolds = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
     
     verifyEqual(testCase, numerical(1:3), zeroReynolds(1:3), 'AbsTol', 1e-10, 'RelTol', 1e-10)
@@ -117,12 +115,12 @@ end
 function testSwitchboardNumerical(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
-    modes = 7;
+    modes = 5;
     
-    numerical = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
     switchboard = compute_c_switchboard("n",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
-    verifyEqual(testCase, switchboard, numerical, "AbsTol", 1e-15);
+    verifyEqual(testCase, switchboard, numerical(1:modes), "AbsTol", 1e-15);
 end
 
 function testSwitchboardLongwave(testCase)
