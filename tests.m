@@ -96,7 +96,7 @@ function testNumericalMatchesZeroReynolds(testCase)
     numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
     zeroReynolds = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
     
-    verifyEqual(testCase, numerical(1:3), zeroReynolds(1:3), 'AbsTol', 1e-10, 'RelTol', 1e-10)
+    verifyEqual(testCase, numerical(1:3), zeroReynolds(1:3), 'AbsTol', 1e-8, 'RelTol', 1e-8)
 end
 
 
@@ -184,7 +184,7 @@ function testResidual(testCase)
     [val,~,res] = compute_numerical(1,1,1,1,1,1,1,1,1);
     actual = abs(res(val~=0));
     actual = actual(1:modes);
-    verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1e-8)
+    verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1e-7)
 end
 
 function testConvergence(testCase)
