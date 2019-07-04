@@ -1,4 +1,4 @@
-function c = inBoth(a, b, varargin)
+function [c, index] = inBoth(a, b, varargin)
     p = inputParser;
     addOptional(p, 'AbsTol', 1e-14, @isnumeric);
     addOptional(p, 'RelTol', 1e-14, @isnumeric);
@@ -15,4 +15,5 @@ function c = inBoth(a, b, varargin)
     end
 
     c = a(aIndex);
+    index = aIndex;
 end
