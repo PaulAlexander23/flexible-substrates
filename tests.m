@@ -178,3 +178,57 @@ function testSwitchboardUnknownMethod(testCase)
         verifyEqual(testCase, myError.message, 'Unknown method.');
     end
 end
+
+function testResidual(testCase)
+    modes = 5;
+    [val,~,res] = compute_numerical(1,1,1,1,1,1,1,1,1);
+    actual = abs(res(val~=0));
+    actual = actual(1:modes);
+    verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1e-8)
+end
+
+function testConvergence(testCase)
+    numberOfPolynomials = 1:70;
+    eigenvalue = zeros(length(numberOfPolynomials),1);
+    sizeOfEigenvalue = zeros(length(numberOfPolynomials),1);
+    for j = 1:length(numberOfPolynomials)
+        c = compute_numerical(1,1,1,1,1,1,1,1,1,numberOfPolynomials(j));
+        eigenvalue(j) = c(1);
+        sizeOfEigenvalue(j) = length(c);
+    end
+    
+%     figure;
+%     plot(numberOfPolynomials,eigenvalue);
+%     figure;
+%     plot(numberOfPolynomials(1:end-1),log10(abs(diff(eigenvalue))));
+%     figure;
+%     plot(numberOfPolynomials,sizeOfEigenvalue)
+
+    minCorrectNumberOfPolynomials = 40;
+    actual = abs(diff(eigenvalue(minCorrectNumberOfPolynomials:end)));
+    
+    verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1e-8)
+end
+
+function testConvergenceLargeReynolds(testCase)
+    numberOfPolynomials = 1:100;
+    modes = 5;
+    eigenvalues = zeros(length(numberOfPolynomials),modes);
+    sizeOfEigenvalue = zeros(length(numberOfPolynomials),1);
+    for j = 1:length(numberOfPolynomials)
+        c = compute_numerical(12.7,10000,cot(pi/4),1000,0,0,0,0,0,numberOfPolynomials(j));
+        eigenvalues(j,:) = c(1:5);
+        sizeOfEigenvalue(j) = length(c);
+    end
+    
+%     figure;
+%     plot(numberOfPolynomials,eigenvalues);
+%     legend
+%     figure;
+%     plot(numberOfPolynomials(1:end-1),log10(abs(diff(eigenvalues))));
+
+    minCorrectNumberOfPolynomials = 40;
+    actual = abs(diff(eigenvalues(minCorrectNumberOfPolynomials:end,:)));
+    
+    verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1e-5)
+end
