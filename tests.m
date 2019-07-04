@@ -2,35 +2,6 @@ function tests = tests()
     tests = functiontests(localfunctions);
 end
 
-function test(testCase)
-    a = ones(10,1);
-    b = zeros(10,1);
-    b2 = b;
-    b2(1) = 1;
-    r = [0.959492426392903, 0.655740699156587, 0.035711678574190, 0.849129305868777, 0.933993247757551, 0.678735154857773, 0.757740130578333, 0.743132468124916, 0.392227019534168, 0.655477890177557]';
-    r2 = r;
-    r2(1) = 1;
-    r3 = r + 1e-7;
-    
-    verifyEqual(testCase,inBoth(a,a),a);
-    verifyEqual(testCase,inBoth(b,b),b);
-    verifyEqual(testCase,inBoth(r,r),r);
-    verifyEqual(testCase,inBoth(r,r3,'AbsTol',1e-6),r);
-    verifyEqual(testCase,inBoth(r,r3,'RelTol',1e-4),r);
-    verifyEqual(testCase,inBoth(r,r3,'AbsTol',1e-6,'RelTol',1e-4),r);
-    verifyEqual(testCase,inBoth(r,[r;r]),r);
-    verifyEqual(testCase,inBoth([r;r],r),r);
-    verifyEqual(testCase,inBoth(b2,r2),1);
-    verifyEqual(testCase,inBoth(r2,b2),1);
-    verifyEqual(testCase,inBoth(a,r2),1);
-    verifyEqual(testCase,inBoth(r2,a),1);
-    
-    verifyEqual(testCase,inBoth(a,b),[]);
-    verifyEqual(testCase,inBoth(r,r3,'AbsTol',1e-8),[]);
-    verifyEqual(testCase,inBoth(r,r3,'RelTol',1e-6),[]);
-    verifyEqual(testCase,inBoth(r,r3,'AbsTol',1e-8,'RelTol',1e-6),[]);
-end
-
 function testLongWave(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
