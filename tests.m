@@ -217,7 +217,7 @@ function testConvergenceLargeReynolds(testCase)
     sizeOfEigenvalue = zeros(length(numberOfPolynomials),1);
     for j = 1:length(numberOfPolynomials)
         c = compute_numerical(12.7,10000,cot(pi/4),1000,0,0,0,0,0,numberOfPolynomials(j));
-        eigenvalues(j,:) = c(1:5);
+        eigenvalues(j,:) = c(1:modes);
         sizeOfEigenvalue(j) = length(c);
     end
     
