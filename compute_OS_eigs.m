@@ -89,7 +89,7 @@ function [val, vec, residual] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI,num
     %Filter results
     val(isinf(val)) = nan + nan*1i;
     val(abs(val)>1e6) = nan + nan*1i;
-    val(abs(val)<1e-11) = nan + nan*1i;
+    val(abs(val)<1e-5) = nan + nan*1i;
     
     %Sort results
     [~,index] = sort(imag(val),'descend','MissingPlacement','last');
