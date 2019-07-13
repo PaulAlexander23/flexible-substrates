@@ -1,4 +1,4 @@
-function tests = tests()
+function tests = testCompute()
     tests = functiontests(localfunctions);
 end
 

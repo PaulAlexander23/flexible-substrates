@@ -1,0 +1,4 @@
+
+runtests('testInBoth')
+
+runtests('testCompute')
