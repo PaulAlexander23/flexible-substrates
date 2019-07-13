@@ -107,7 +107,7 @@ function testSwitchboardOutputSize(testCase)
     methods = {"n", "l", "s", "z", "p"};
     
     for j = 1:length(methods)
-        actual = compute_c_switchboard(methods{j},k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+        actual = computeEigenvalues(methods{j},k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
         verifySize(testCase, actual, [1,modes]);
     end
 end
@@ -118,7 +118,7 @@ function testSwitchboardNumerical(testCase)
     modes = 5;
     
     numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
-    switchboard = compute_c_switchboard("n",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("n",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, numerical(1:modes), "AbsTol", 1e-15);
 end
@@ -129,7 +129,7 @@ function testSwitchboardLongwave(testCase)
     modes = 1;
     
     longwave = computeLongWave(k,R,cotbeta,0,0,0,0,AK,0);
-    switchboard = compute_c_switchboard("l",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("l",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, longwave, "AbsTol", 1e-15);
 end
@@ -140,7 +140,7 @@ function testSwitchboardLongwaveScaled(testCase)
     modes = 1;
     
     longwave = computeLongWave(k,R,cotbeta,S*(k.^2),AD*(k),AT*(k.^2),AB*(k.^4),AK,AI*(k.^2));
-    switchboard = compute_c_switchboard("s",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("s",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, longwave, "AbsTol", 1e-15);
 end
@@ -151,7 +151,7 @@ function testSwitchboardZeroReynolds(testCase)
     modes = 3;
     
     zeroReynolds = computeZeroReynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
-    switchboard = compute_c_switchboard("z",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("z",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, zeroReynolds, "AbsTol", 1e-15);
 end
@@ -162,7 +162,7 @@ function testSwitchboardZeroReynoldsPolySolve(testCase)
     modes = 3;
     
     zeroReynoldsPolySolve = computeZeroReynoldsPolySolve(k,cotbeta,S,AD,AT,AB,AK);
-    switchboard = compute_c_switchboard("p",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("p",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, zeroReynoldsPolySolve, "AbsTol", 1e-15);
 end
@@ -173,7 +173,7 @@ function testSwitchboardUnknownMethod(testCase)
     modes = 3;
     
     try
-        compute_c_switchboard("a",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+        computeEigenvalues("a",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     catch myError
         verifyEqual(testCase, myError.message, 'Unknown method.');
     end
@@ -216,7 +216,7 @@ function testConvergenceLargeReynolds(testCase)
     eigenvalues = zeros(length(numberOfPolynomials),modes);
     sizeOfEigenvalue = zeros(length(numberOfPolynomials),1);
     for j = 1:length(numberOfPolynomials)
-        c = compute_c_switchboard('n',12.7,10000,cot(pi/4),1000,0,0,0,0,0,modes,numberOfPolynomials(j));
+        c = computeEigenvalues('n',12.7,10000,cot(pi/4),1000,0,0,0,0,0,modes,numberOfPolynomials(j));
         eigenvalues(j,:) = c(1:modes);
         sizeOfEigenvalue(j) = length(c);
     end
