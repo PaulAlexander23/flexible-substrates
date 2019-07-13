@@ -1,4 +1,4 @@
-function out = compute_zero_reynolds(k, cotbeta, S, AD, AT, AB, AK, AI)
+function out = computeZeroReynolds(k, cotbeta, S, AD, AT, AB, AK, AI)
     %COMPUTE_ZERO_REYNOLDS Given required parameters, returns eigenvalue c
     %from the zero Reynolds number analysis
     if (AI == 0)

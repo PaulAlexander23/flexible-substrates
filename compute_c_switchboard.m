@@ -10,15 +10,15 @@ function out = compute_c_switchboard(method, k, R, cotbeta, S, AD, AT, AB, AK, A
     
     out = nan(1,modes) + nan(1,modes)*1i;
     if (method == "numerical") || (method == "n")
-        vec = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,numberOfPolynomials);
+        vec = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,numberOfPolynomials);
     elseif (method == "longwave") || (method == "l")
-        vec = compute_long_wave(k,R,cotbeta,0,0,0,0,AK,0);
+        vec = computeLongWave(k,R,cotbeta,0,0,0,0,AK,0);
     elseif (method == "scaled longwave") || (method == "s")
-        vec = compute_long_wave(k,R,cotbeta,S*(k.^2),AD*(k),AT*(k.^2),AB*(k.^4),AK,AI*(k.^2));
+        vec = computeLongWave(k,R,cotbeta,S*(k.^2),AD*(k),AT*(k.^2),AB*(k.^4),AK,AI*(k.^2));
     elseif (method == "zeroreynolds") || (method == "z")
-        vec = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
+        vec = computeZeroReynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
     elseif (method == "zeroreynoldspoly") || (method == "p")
-        vec = compute_zero_reynolds_poly_solve(k,cotbeta,S,AD,AT,AB,AK);
+        vec = computeZeroReynoldsPolySolve(k,cotbeta,S,AD,AT,AB,AK);
     else
         error("Unknown method.");
     end

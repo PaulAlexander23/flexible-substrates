@@ -6,7 +6,7 @@ function testLongWave(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     
-    actual = compute_long_wave(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+    actual = computeLongWave(k,R,cotbeta,S,AD,AT,AB,AK,AI);
     expected = 0.5 - 0.466666666666667i;
     
     verifySize(testCase, actual, [1, 1]);
@@ -17,7 +17,7 @@ function testLongWaveVector(testCase)
     k = ones(100,1); R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     
-    actual = compute_long_wave(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+    actual = computeLongWave(k,R,cotbeta,S,AD,AT,AB,AK,AI);
     expected = (0.5 - 0.466666666666667i)*k;
     
     verifySize(testCase, actual, [100, 1]);
@@ -28,7 +28,7 @@ function testZeroReynolds(testCase)
     k = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     
-    actual = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
+    actual = computeZeroReynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
     expected = [1.238715733748955 + 0.137975528959789i, ...
         1.767603508175014 - 0.558433545899801i, ...
         -1.710557319115801 - 1.421577867199287i];
@@ -41,7 +41,7 @@ function testZeroReynoldsVector(testCase)
     k = ones(100,1); cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     
-    actual = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
+    actual = computeZeroReynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
     expected = [1.238715733748955 + 0.137975528959789i, ...
         1.767603508175014 - 0.558433545899801i, ...
         -1.710557319115801 - 1.421577867199287i].*k;
@@ -54,7 +54,7 @@ function testZeroReynoldsPolySolve(testCase)
     k = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1;
     
-    actual = compute_zero_reynolds_poly_solve(k,cotbeta,S,AD,AT,AB,AK);
+    actual = computeZeroReynoldsPolySolve(k,cotbeta,S,AD,AT,AB,AK);
     expected = [0.196839480807356 + 0.318190487163222i, ...
         0.769166674431962 + 0.042870493499694i, ...
         1];
@@ -67,7 +67,7 @@ function testNumerical(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 5;
-    actual = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
+    actual = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
     expected = 1.0e+02 * [ ...
         0.011733305393037 + 0.001627690450129i, ...
         0.017151795941829 - 0.004392464293491i, ...
@@ -83,8 +83,8 @@ function testNumericalMatchesLongWaveForSmallK(testCase)
     k = 0.01; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     
-    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
-    longwave = compute_long_wave(k,R,cotbeta,0,0,0,0,AK,0);
+    numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
+    longwave = computeLongWave(k,R,cotbeta,0,0,0,0,AK,0);
     
     verifyEqual(testCase, numerical(1), longwave, 'AbsTol', 1e-3, 'RelTol', 1e-4)
 end
@@ -93,8 +93,8 @@ function testNumericalMatchesZeroReynolds(testCase)
     k = 1; R = 0; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     
-    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
-    zeroReynolds = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
+    numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
+    zeroReynolds = computeZeroReynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
     
     verifyEqual(testCase, numerical(1:3), zeroReynolds(1:3), 'AbsTol', 1e-8, 'RelTol', 1e-8)
 end
@@ -117,7 +117,7 @@ function testSwitchboardNumerical(testCase)
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 5;
     
-    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
+    numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
     switchboard = compute_c_switchboard("n",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, numerical(1:modes), "AbsTol", 1e-15);
@@ -128,7 +128,7 @@ function testSwitchboardLongwave(testCase)
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 1;
     
-    longwave = compute_long_wave(k,R,cotbeta,0,0,0,0,AK,0);
+    longwave = computeLongWave(k,R,cotbeta,0,0,0,0,AK,0);
     switchboard = compute_c_switchboard("l",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, longwave, "AbsTol", 1e-15);
@@ -139,7 +139,7 @@ function testSwitchboardLongwaveScaled(testCase)
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 1;
     
-    longwave = compute_long_wave(k,R,cotbeta,S*(k.^2),AD*(k),AT*(k.^2),AB*(k.^4),AK,AI*(k.^2));
+    longwave = computeLongWave(k,R,cotbeta,S*(k.^2),AD*(k),AT*(k.^2),AB*(k.^4),AK,AI*(k.^2));
     switchboard = compute_c_switchboard("s",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, longwave, "AbsTol", 1e-15);
@@ -150,7 +150,7 @@ function testSwitchboardZeroReynolds(testCase)
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 3;
     
-    zeroReynolds = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
+    zeroReynolds = computeZeroReynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
     switchboard = compute_c_switchboard("z",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, zeroReynolds, "AbsTol", 1e-15);
@@ -161,7 +161,7 @@ function testSwitchboardZeroReynoldsPolySolve(testCase)
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 3;
     
-    zeroReynoldsPolySolve = compute_zero_reynolds_poly_solve(k,cotbeta,S,AD,AT,AB,AK);
+    zeroReynoldsPolySolve = computeZeroReynoldsPolySolve(k,cotbeta,S,AD,AT,AB,AK);
     switchboard = compute_c_switchboard("p",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
     
     verifyEqual(testCase, switchboard, zeroReynoldsPolySolve, "AbsTol", 1e-15);
@@ -181,7 +181,7 @@ end
 
 function testResidual(testCase)
     modes = 5;
-    [val,~,res] = compute_numerical(1,1,1,1,1,1,1,1,1,50);
+    [val,~,res] = computeNumerical(1,1,1,1,1,1,1,1,1,50);
     actual = abs(res(val~=0));
     actual = actual(1:modes);
     verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1e-7)
@@ -192,7 +192,7 @@ function testConvergence(testCase)
     eigenvalue = zeros(length(numberOfPolynomials),1);
     sizeOfEigenvalue = zeros(length(numberOfPolynomials),1);
     for j = 1:length(numberOfPolynomials)
-        c = compute_numerical(1,1,1,1,1,1,1,1,1,numberOfPolynomials(j));
+        c = computeNumerical(1,1,1,1,1,1,1,1,1,numberOfPolynomials(j));
         eigenvalue(j) = c(1);
         sizeOfEigenvalue(j) = length(c);
     end
