@@ -82,22 +82,26 @@ function [val, vec, residual] = chebyshevTauFlexibleOS(k,R,cotbeta,S,AD,AT,AB,AK
     E=[zeros(2*M-1,2*M);...
         e4f zeros(1,M)];
     
-    
     %Solve eigenvalue problem c^2*Ex-cBx+Ax=0
     [vec, val] = polyeig(A,-B,E);
     
-    %Filter results
-    val(isinf(val)) = nan + nan*1i;
-    val(abs(val)>1e6) = nan + nan*1i;
-    val(abs(val)<1e-5) = nan + nan*1i;
+    val = filterResults(val);
     
-    %Sort results
-    [~,index] = sort(imag(val),'descend','MissingPlacement','last');
-    val = val(index);
-    vec = vec(:,index);
+    [val, vec] = sortResults(val,vec);
     
-    %Compute residual
     residual = (sum(abs((A*vec - B*vec*diag(val)+ E*vec*diag(val.^2))).^2).^0.5)';
     
     val = val.';
+end
+
+function val = filterResults(val)
+    val(isinf(val)) = nan + nan*1i;
+    val(abs(val)>1e6) = nan + nan*1i;
+    val(abs(val)<1e-5) = nan + nan*1i;
+end
+
+function [val, vec] = sortResults(val, vec)
+    [~,index] = sort(imag(val),'descend','MissingPlacement','last');
+    val = val(index);
+    vec = vec(:,index);
 end
