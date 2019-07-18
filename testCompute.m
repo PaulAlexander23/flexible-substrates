@@ -100,80 +100,75 @@ function testNumericalMatchesZeroReynolds(testCase)
 end
 
 
-function testSwitchboardOutputSize(testCase)
-    k = 1; R = 1; cotbeta = 1; S = 1;
-    AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
+function testEigenvaluesOutputSize(testCase)
     modes = 4;
     methods = {"n", "l", "s", "z", "p"};
     
     for j = 1:length(methods)
-        actual = computeEigenvalues(methods{j},k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+        actual = computeEigenvalues(methods{j},defaultParams(),modes);
         verifySize(testCase, actual, [1,modes]);
     end
 end
 
-function testSwitchboardNumerical(testCase)
+function testEigenvaluesNumerical(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 5;
     
     numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
-    switchboard = computeEigenvalues("n",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("n",defaultParams(),modes);
     
     verifyEqual(testCase, switchboard, numerical(1:modes), "AbsTol", 1e-15);
 end
 
-function testSwitchboardLongwave(testCase)
-    k = 1; R = 1; cotbeta = 1; S = 1;
-    AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
+function testEigenvaluesLongwave(testCase)
+    k = 1; R = 1; cotbeta = 1; AK = 1;
     modes = 1;
     
     longwave = computeLongWave(k,R,cotbeta,0,0,0,0,AK,0);
-    switchboard = computeEigenvalues("l",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("l",defaultParams(),modes);
     
     verifyEqual(testCase, switchboard, longwave, "AbsTol", 1e-15);
 end
 
-function testSwitchboardLongwaveScaled(testCase)
+function testEigenvaluesLongwaveScaled(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 1;
     
     longwave = computeLongWave(k,R,cotbeta,S*(k.^2),AD*(k),AT*(k.^2),AB*(k.^4),AK,AI*(k.^2));
-    switchboard = computeEigenvalues("s",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("s",defaultParams(),modes);
     
     verifyEqual(testCase, switchboard, longwave, "AbsTol", 1e-15);
 end
 
-function testSwitchboardZeroReynolds(testCase)
-    k = 1; R = 1; cotbeta = 1; S = 1;
+function testEigenvaluesZeroReynolds(testCase)
+    k = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 3;
     
     zeroReynolds = computeZeroReynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
-    switchboard = computeEigenvalues("z",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("z",defaultParams(),modes);
     
     verifyEqual(testCase, switchboard, zeroReynolds, "AbsTol", 1e-15);
 end
 
-function testSwitchboardZeroReynoldsPolySolve(testCase)
-    k = 1; R = 1; cotbeta = 1; S = 1;
-    AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
+function testEigenvaluesZeroReynoldsPolySolve(testCase)
+    k = 1; cotbeta = 1; S = 1;
+    AD = 1; AT = 1; AB = 1; AK = 1;
     modes = 3;
     
     zeroReynoldsPolySolve = computeZeroReynoldsPolySolve(k,cotbeta,S,AD,AT,AB,AK);
-    switchboard = computeEigenvalues("p",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    switchboard = computeEigenvalues("p",defaultParams(),modes);
     
     verifyEqual(testCase, switchboard, zeroReynoldsPolySolve, "AbsTol", 1e-15);
 end
 
-function testSwitchboardUnknownMethod(testCase)
-    k = 1; R = 1; cotbeta = 1; S = 1;
-    AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
+function testEigenvaluesUnknownMethod(testCase)
     modes = 3;
     
     try
-        computeEigenvalues("a",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+        computeEigenvalues("a",defaultParams(),modes);
     catch myError
         verifyEqual(testCase, myError.message, 'Unknown method.');
     end
@@ -211,12 +206,13 @@ function testConvergence(testCase)
 end
 
 function testConvergenceLargeReynolds(testCase)
+    params = makeParamsStruct(12.7,10000,cot(pi/4),1000,0,0,0,0,0);
     numberOfPolynomials = 1:100;
     modes = 5;
     eigenvalues = zeros(length(numberOfPolynomials),modes);
     sizeOfEigenvalue = zeros(length(numberOfPolynomials),1);
     for j = 1:length(numberOfPolynomials)
-        c = computeEigenvalues('n',12.7,10000,cot(pi/4),1000,0,0,0,0,0,modes,numberOfPolynomials(j));
+        c = computeEigenvalues('n',params,modes,numberOfPolynomials(j));
         eigenvalues(j,:) = c(1:modes);
         sizeOfEigenvalue(j) = length(c);
     end
@@ -231,4 +227,30 @@ function testConvergenceLargeReynolds(testCase)
     actual = abs(diff(eigenvalues(minCorrectNumberOfPolynomials:end,:)));
     
     verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1.2e-5)
+end
+
+function p = defaultParams()
+    p = struct();
+    p.k = 1;
+    p.R = 1;
+    p.cotbeta = 1;
+    p.S = 1;
+    p.AK = 1;
+    p.AT = 1;
+    p.AB = 1;
+    p.AD = 1;
+    p.AI = 1;
+end
+
+function p = makeParamsStruct(k, R, cotbeta, S, AD, AT, AB, AK, AI)
+    p = struct();
+    p.k = k;
+    p.R = R;
+    p.cotbeta = cotbeta;
+    p.S = S;
+    p.AK = AK;
+    p.AT = AT;
+    p.AB = AB;
+    p.AD = AD;
+    p.AI = AI;
 end

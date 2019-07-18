@@ -1,4 +1,4 @@
-function out = compute_c_switchboard(method, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials)
+function out = computeEigenvalues(method, params, modes, numberOfPolynomials)
     %COMPUTE_C_SWITCHBOARD Returns call to the method prescibed
     %   method = 
     %       "numerical" or "n" - numerical method,
@@ -10,15 +10,15 @@ function out = compute_c_switchboard(method, k, R, cotbeta, S, AD, AT, AB, AK, A
     
     out = nan(1,modes) + nan(1,modes)*1i;
     if (method == "numerical") || (method == "n")
-        vec = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,numberOfPolynomials);
+        vec = computeNumerical(params.k,params.R,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK,params.AI,numberOfPolynomials);
     elseif (method == "longwave") || (method == "l")
-        vec = computeLongWave(k,R,cotbeta,0,0,0,0,AK,0);
+        vec = computeLongWave(params.k,params.R,params.cotbeta,0,0,0,0,params.AK,0);
     elseif (method == "scaled longwave") || (method == "s")
-        vec = computeLongWave(k,R,cotbeta,S*(k.^2),AD*(k),AT*(k.^2),AB*(k.^4),AK,AI*(k.^2));
+        vec = computeLongWave(params.k,params.R,params.cotbeta,params.S*(params.k.^2),params.AD*(params.k),params.AT*(params.k.^2),params.AB*(params.k.^4),params.AK,params.AI*(params.k.^2));
     elseif (method == "zeroreynolds") || (method == "z")
-        vec = computeZeroReynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
+        vec = computeZeroReynolds(params.k,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK,params.AI);
     elseif (method == "zeroreynoldspoly") || (method == "p")
-        vec = computeZeroReynoldsPolySolve(k,cotbeta,S,AD,AT,AB,AK);
+        vec = computeZeroReynoldsPolySolve(params.k,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK);
     else
         error("Unknown method.");
     end
