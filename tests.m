@@ -66,8 +66,9 @@ end
 function testNumerical(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
+    nop = 50;
     modes = 5;
-    actual = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+    actual = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,nop);
     expected = 1.0e+02 * [ ...
         0.011733305393037 + 0.001627690450129i, ...
         0.017151795941829 - 0.004392464293491i, ...
@@ -82,8 +83,9 @@ end
 function testNumericalMatchesLongWaveForSmallK(testCase)
     k = 0.01; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
+    nop = 50;
     
-    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,nop);
     longwave = compute_long_wave(k,R,cotbeta,0,0,0,0,AK,0);
     
     verifyEqual(testCase, numerical(1), longwave, 'AbsTol', 1e-3, 'RelTol', 1e-4)
@@ -92,8 +94,9 @@ end
 function testNumericalMatchesZeroReynolds(testCase)
     k = 1; R = 0; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
+    nop = 50;
     
-    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
+    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,nop);
     zeroReynolds = compute_zero_reynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
     
     verifyEqual(testCase, numerical(1:3), zeroReynolds(1:3), 'AbsTol', 1e-8, 'RelTol', 1e-8)
@@ -115,10 +118,10 @@ end
 function testSwitchboardNumerical(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
-    modes = 5;
+    modes = 5; nop = 50;
     
-    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI);
-    switchboard = compute_c_switchboard("n",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes);
+    numerical = compute_numerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,nop);
+    switchboard = compute_c_switchboard("n",k,R,cotbeta,S,AD,AT,AB,AK,AI,modes,nop);
     
     verifyEqual(testCase, switchboard, numerical(1:modes), "AbsTol", 1e-15);
 end
@@ -181,7 +184,7 @@ end
 
 function testResidual(testCase)
     modes = 5;
-    [val,~,res] = compute_numerical(1,1,1,1,1,1,1,1,1);
+    [val,~,res] = compute_numerical(1,1,1,1,1,1,1,1,1,50);
     actual = abs(res(val~=0));
     actual = actual(1:modes);
     verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1e-7)
@@ -216,7 +219,7 @@ function testConvergenceLargeReynolds(testCase)
     eigenvalues = zeros(length(numberOfPolynomials),modes);
     sizeOfEigenvalue = zeros(length(numberOfPolynomials),1);
     for j = 1:length(numberOfPolynomials)
-        c = compute_numerical(12.7,10000,cot(pi/4),1000,0,0,0,0,0,numberOfPolynomials(j));
+        c = compute_c_switchboard("n",12.7,10000,cot(pi/4),1000,0,0,0,0,0,modes,numberOfPolynomials(j));
         eigenvalues(j,:) = c(1:modes);
         sizeOfEigenvalue(j) = length(c);
     end
@@ -230,5 +233,5 @@ function testConvergenceLargeReynolds(testCase)
     minCorrectNumberOfPolynomials = 40;
     actual = abs(diff(eigenvalues(minCorrectNumberOfPolynomials:end,:)));
     
-    verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1e-5)
+    verifyEqual(testCase,actual,zeros(size(actual)),'AbsTol',1.2e-5)
 end
