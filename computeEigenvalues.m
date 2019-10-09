@@ -10,7 +10,7 @@ function out = computeEigenvalues(method, params, modes, numberOfPolynomials)
     
     out = nan(1,modes) + nan(1,modes)*1i;
     if (method == "numerical") || (method == "n")
-        vec = computeNumerical(params.k,params.R,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK,params.AI,numberOfPolynomials);
+        vec = computeNumerical(params.k,params.R,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK,params.AI,numberOfPolynomials,modes);
     elseif (method == "longwave") || (method == "l")
         vec = computeLongWave(params.k,params.R,params.cotbeta,0,0,0,0,params.AK,0);
     elseif (method == "scaled longwave") || (method == "s")

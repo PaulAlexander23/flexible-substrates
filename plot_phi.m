@@ -4,7 +4,7 @@ function plot_phi(k,R,cotbeta,S,AD,AT,AB,AK,AI,mode,varargin)
         mode = 1;
     end
     
-    [~, vec] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI,mode);
+    [~, vec] = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,mode);
    
     z = linspace(0,1)';
     
