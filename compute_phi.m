@@ -4,7 +4,7 @@ function phi = compute_phi(y,vec)
    T = zeros(length(y),N+3);
    
    for k = 0:N+2
-       T(:,k+1) = chebyshevT(k,y);
+       T(:,k+1) = myChebyshevT(k,y);
    end
    
    phi = T*vec(1:end/2,:);
