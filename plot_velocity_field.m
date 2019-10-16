@@ -7,7 +7,7 @@ function plot_velocity_field(k,R,cotbeta,S,AD,AT,AB,AK,AI,varargin)
     
     z = linspace(0,1,zResolution + 1)';
     
-    phi = compute_phi(z, vec);
+    phi = computePhi(z, vec);
     
     
     x = linspace(0,2*pi/k,xResolution);

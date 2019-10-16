@@ -4,7 +4,7 @@ function plot_h(k,R,cotbeta,S,AD,AT,AB,AK,AI,varargin)
     [val, vec] = compute_OS_eigs(k,R,cotbeta,S,AD,AT,AB,AK,AI,1);
     
     delta = 0.1;
-    phi = compute_phi([1-delta, 1], vec);
+    phi = computePhi([1-delta, 1], vec);
     
     x = linspace(0,2*pi/k)';
     

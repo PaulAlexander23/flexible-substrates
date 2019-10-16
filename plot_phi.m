@@ -8,7 +8,7 @@ function plot_phi(k,R,cotbeta,S,AD,AT,AB,AK,AI,mode,varargin)
    
     z = linspace(0,1)';
     
-    phi = compute_phi(z, vec);
+    phi = computePhi(z, vec);
 
     plot(real(phi(:,mode)),z,varargin{:},'LineWidth',1.1)
     hold on

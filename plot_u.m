@@ -5,7 +5,7 @@ function plot_u(k,R,cotbeta,S,AD,AT,AB,AK,AI,varargin)
     
     z = linspace(0,1)';
     
-    phi = compute_phi(z, vec);
+    phi = computePhi(z, vec);
     
     u = 2 * diff(real(phi(:,1)))./diff(z);
     

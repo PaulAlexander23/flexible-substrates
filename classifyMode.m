@@ -4,7 +4,7 @@ function mode = classifyMode(c, vec, k, debug)
     wavespeed = real(c);
     
     z = linspace(0,1)';
-    phi = compute_phi(z, vec);
+    phi = computePhi(z, vec);
     energy = computeEigenfunctionEnergy(z, phi, k);
     
     [maxPhi, maxPhiIndex] = max(phi);
