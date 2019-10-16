@@ -1,3 +1,3 @@
 function u = computeU(z, phi)
-    u = 2 * gradient(real(phi), z);
+    u = gradient(2 * real(phi), z);
 end
