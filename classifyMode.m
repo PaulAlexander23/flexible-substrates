@@ -1,32 +1,20 @@
-function mode = classifyMode(params, modeRank, debug)
+function mode = classifyMode(c, vec, k, debug)
     if nargin < 3, debug = false; end
     
-    if isstruct(params)
-        mode = classifyModeSingle(params, modeRank, debug);
-    elseif iscell(params)
-        N = length(params);
-        mode = zeros(3, N);
-        for n = 1:N
-            mode(:,n) = classifyModeSingle(params{n}, modeRank, debug);
-        end
-    end
-end
-
-function mode = classifyModeSingle(params, modeRank, debug)
-    numberOfPolynomials = 80;
-    
-    [val, vec] = computeNumerical(params.k, params.R, ...
-        params.cotbeta, params.S, params.AD, params.AT, params.AB, ...
-        params.AK, params.AI, numberOfPolynomials);
-    
-    wavespeed = real(val(modeRank));
+    wavespeed = real(c);
     
     z = linspace(0,1)';
-    phi = compute_phi(z, vec(:,modeRank));
+    phi = compute_phi(z, vec);
+    energy = computeEigenfunctionEnergy(z, phi, k);
+    
     [maxPhi, maxPhiIndex] = max(phi);
     maxPhiLocation = z(maxPhiIndex);
-    
-    energy = computeEigenfunctionEnergy(params.k, z, phi);
+    u = computeU(z, phi);
+    [maxU, maxUIndex] = max(u);
+    maxULocation = z(maxUIndex);
+    v = computeV(k, phi);
+    [maxV, maxVIndex] = max(v);
+    maxVLocation = z(maxVIndex);
     [maxEnergy, maxEnergyIndex] = max(energy);
     maxEnergyLocation = z(maxEnergyIndex);
     
@@ -34,15 +22,26 @@ function mode = classifyModeSingle(params, modeRank, debug)
         fprintf("Wavespeed: %g\n", wavespeed)
         fprintf("Maximum phi: %g\n", maxPhi)
         fprintf("Maximum phi Location: %g\n", maxPhiLocation)
+        fprintf("Maximum u: %g\n", maxU)
+        fprintf("Maximum u Location: %g\n", maxULocation)
+        fprintf("Maximum v: %g\n", maxV)
+        fprintf("Maximum v Location: %g\n", maxVLocation)
         fprintf("Maximum energy: %g\n", maxEnergy)
         fprintf("Maximum energy Location: %g\n", maxEnergyLocation)
     end
     
-    if maxEnergyLocation == 1
+    if wavespeed > 1
         mode = [1, 0, 0]';
-    elseif maxEnergyLocation == 0
-        mode = [0, 0, 1]';
-    else
+    elseif wavespeed < 1
         mode = [0, 1, 0]';
+    else
+        mode = [0, 0, 1]';
     end
+    %if maxEnergyLocation == 1
+    %    mode = [1, 0, 0]';
+    %elseif maxEnergyLocation == 0
+    %    mode = [0, 0, 1]';
+    %else
+    %    mode = [0, 1, 0]';
+    %end
 end
