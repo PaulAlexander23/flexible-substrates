@@ -19,6 +19,8 @@ function out = computeEigenvalues(method, params, modes, numberOfPolynomials)
         vec = computeZeroReynolds(params.k,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK,params.AI);
     elseif (method == "zeroreynoldspoly") || (method == "p")
         vec = computeZeroReynoldsPolySolve(params.k,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK);
+    elseif (method == "zeroreynoldslongwave") || (method == "zl")
+        vec = computeZeroReynoldsLongWave(params.k,params.cotbeta,params.AD);
     else
         error("Unknown method.");
     end
