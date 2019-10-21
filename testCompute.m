@@ -67,7 +67,7 @@ function testNumerical(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     modes = 5;
-    actual = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
+    actual = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50,modes);
     expected = 1.0e+02 * [ ...
         0.011733305393037 + 0.001627690450129i, ...
         0.017151795941829 - 0.004392464293491i, ...
@@ -83,7 +83,7 @@ function testNumericalMatchesLongWaveForSmallK(testCase)
     k = 0.01; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
     
-    numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
+    numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50,1);
     longwave = computeLongWave(k,R,cotbeta,0,0,0,0,AK,0);
     
     verifyEqual(testCase, numerical(1), longwave, 'AbsTol', 1e-3, 'RelTol', 1e-4)
