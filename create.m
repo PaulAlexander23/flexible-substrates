@@ -5,9 +5,9 @@ function create(k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials
     
     parfor ki = 1:length(k)
         for Ri = 1:Rl
-            c(Ri,ki,:) = imag(computeEigenvalues('n', k(ki), R(Ri), cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials));
+            [val(Ri,ki,:), vec(Ri,ki,:,:)] = computeNumerical(k(ki),R(Ri),cotbeta,S,AD,AT,AB,AK,AI,numberOfPolynomials,modes);
         end
     end
 
-    saveData("neutral-curve", c, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials)
+    saveData("neutral-curve", val, vec, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials)
 end

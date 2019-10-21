@@ -66,7 +66,6 @@ end
 function testNumerical(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
-    nop = 50;
     modes = 5;
     actual = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
     expected = 1.0e+02 * [ ...
@@ -83,7 +82,6 @@ end
 function testNumericalMatchesLongWaveForSmallK(testCase)
     k = 0.01; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
-    nop = 50;
     
     numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
     longwave = computeLongWave(k,R,cotbeta,0,0,0,0,AK,0);
@@ -94,7 +92,6 @@ end
 function testNumericalMatchesZeroReynolds(testCase)
     k = 1; R = 0; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
-    nop = 50;
     
     numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
     zeroReynolds = computeZeroReynolds(k,cotbeta,S,AD,AT,AB,AK,AI);
@@ -116,7 +113,7 @@ end
 function testEigenvaluesNumerical(testCase)
     k = 1; R = 1; cotbeta = 1; S = 1;
     AD = 1; AT = 1; AB = 1; AK = 1; AI = 1;
-    modes = 5; nop = 50;
+    modes = 5;
     
     numerical = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,50);
     switchboard = computeEigenvalues("n",defaultParams(),modes);
