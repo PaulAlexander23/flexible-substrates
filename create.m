@@ -9,5 +9,5 @@ function create(k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials
         end
     end
 
-    saveData("neutral-curve", val, vec, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials)
+    saveData("neutral-curve", val, vec, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials, true)
 end
