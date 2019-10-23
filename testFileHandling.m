@@ -23,11 +23,11 @@ function testSaveAndLoadData(testCase)
     verifyEqual(testCase, actual, expected)
 end
 
-function testSaveDataWithUniqueName(testCase)
+function testSaveDataWithJobID(testCase)
     val = 1; vec = [1, 1]; k = 1; R = 1; cotbeta = 1; S = 1; AD = 1; AT = 1;
     AB = 1; AK = 1; AI = 1; modes = 1; numberOfPolynomials = 1;
-    baseName = saveData("test", val, vec, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials, false);
-    actual = saveData("test", val, vec, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials, true);
+    baseName = saveData("test", val, vec, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials, "");
+    actual = saveData("test", val, vec, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials, "0000001[1]");
     verifyTrue(testCase, baseName ~= actual)
 end
 

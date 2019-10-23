@@ -1,5 +1,5 @@
-function create(k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials)
-
+function create(k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials, jobid)
+    if nargin < 12, jobid = ""; end
     Rl = length(R);
     c = zeros(Rl,length(k),modes);
     
@@ -9,5 +9,5 @@ function create(k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials
         end
     end
 
-    saveData("neutral-curve", val, vec, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials, true)
+    saveData("neutral-curve", val, vec, k, R, cotbeta, S, AD, AT, AB, AK, AI, modes, numberOfPolynomials, jobid)
 end
