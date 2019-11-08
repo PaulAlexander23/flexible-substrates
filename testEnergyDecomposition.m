@@ -46,7 +46,7 @@ function testSurfaceEffectsOfConstantPerturbation(testCase)
     phi = (z.^2/2 + z) * (1 + 1i);
     h = 1;
     actual = computeSurfaceEffects(k, c, z, phi, h);
-    expected = 8*pi - 96*pi;
+    expected = 8*pi + 32*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
 end
 
@@ -70,28 +70,26 @@ function testWallEffectsOfConstantPerturbation(testCase)
     eta = 2;
     params = struct('AD',1);
     actual = computeWallEffects(k, c, z, phi, eta, params);
-    expected = -64*pi - 32*pi;
+    expected = -64*pi + 128*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
 end
 
 function testFluidEffectsOfZeroPerturbation(testCase)
     k = 2;
-    c = 0;
     z = linspace(0,1)';
     phi = zeros(100,1);
     params = struct('R',1);
-    actual = computeFluidEffects(k, c, z, phi, params);
+    actual = computeFluidEffects(k, z, phi, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testFluidEffectsOfConstantPerturbation(testCase)
     k = 2;
-    c = 1i;
     z = linspace(0,1)';
-    phi = (z.^2/2 + z + 1) * (1 + 1i);
+    phi = (z.^2 + 2*z + 2i);
     params = struct('R',1);
-    actual = computeFluidEffects(k, c, z, phi, params);
-    expected = -4028/15*pi - 236/15*pi;
+    actual = computeFluidEffects(k, z, phi, params);
+    expected = -2088/5*pi - 64/3*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
 end

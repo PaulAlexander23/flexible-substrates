@@ -1,4 +1,4 @@
-function workRate = computeSurfaceEffects(k, c, z, phi, h)
+function term1 = computeSurfaceTerm1(k, z, phi)
     dphidz = gradient(phi, z);
     d2phidz2 = gradient(dphidz, z);
     d2phidz2(1) = 2*d2phidz2(1);
@@ -9,7 +9,4 @@ function workRate = computeSurfaceEffects(k, c, z, phi, h)
     z1LogicIndex = (z == 1);
     
     term1 = 4*pi/k * real(conj(dphidz(z1LogicIndex)) * d2phidz2(z1LogicIndex));
-    term2 = 4*pi*k * real((1 - c)*h*conj(dphidz(z1LogicIndex)));
-
-    workRate = term1 + term2;
 end
