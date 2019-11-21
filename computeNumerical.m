@@ -1,7 +1,7 @@
-function [val, vec, residual] = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,numberOfPolynomials,modes)
+function [val, vec, residual] = computeNumerical(params, numberOfPolynomials, modes)
     
-    [val, vec, residual] = chebyshevTauFlexibleOS(k,R,cotbeta,S,AD,AT,AB,AK,AI,numberOfPolynomials);
-    [val2, ~, ~] = chebyshevTauFlexibleOS(k,R,cotbeta,S,AD,AT,AB,AK,AI,numberOfPolynomials + 1);
+    [val, vec, residual] = chebyshevTauFlexibleOS(params, numberOfPolynomials);
+    [val2, ~, ~] = chebyshevTauFlexibleOS(params, numberOfPolynomials + 1);
     
     [~, index] = inBoth(val,val2,'AbsTol',1e-3,'RelTol',1e-3);
     logicIndex = zeros(size(val));
@@ -10,7 +10,7 @@ function [val, vec, residual] = computeNumerical(k,R,cotbeta,S,AD,AT,AB,AK,AI,nu
     vec(:, ~logicIndex) = nan;
     residual(~logicIndex) = nan;
     
-    if nargin>10
+    if nargin>2
         temp = nan(1,modes) + nan(1,modes)*1i;
         temp(1:min(modes,length(val))) = val(1:min(modes,length(val)));
         val = temp;

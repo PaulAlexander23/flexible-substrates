@@ -31,6 +31,6 @@ function testSaveDataWithJobID(testCase)
     verifyTrue(testCase, baseName ~= actual)
 end
 
-function teardownOnce(testCase)
+function teardownOnce(~)
     delete test-*.mat
 end

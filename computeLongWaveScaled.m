@@ -1,0 +1,16 @@
+function c = computeLongWaveScaled(params)
+    %COMPUTE_LONG_WAVE Given required parameters, returns eigenvalue c
+    %from the asymptotic long wave analysis.
+    params.S = params.S*(params.k.^2);
+    params.AD = params.AD*(params.k);
+    params.AT = params.AT*(params.k.^2);
+    params.AB = params.AB*(params.k.^4);
+    params.AI = params.AI*(params.k.^2);
+    
+    c = 2 + params.k .* (-20.*1i.*params.cotbeta .^ 2 + ((5.*1i .* params.AK + 5.*1i .* params.AB + ...
+        (10 .* params.AD) + 5.*1i .* params.AT + -8.*1i .* params.R + -20.*1i .* params.AI) .* params.S - ...
+        8 .* (1i .* params.AB + -4.*1i .* params.AI + 1i .* params.AK + 1i .* params.AT + (2 .* ...
+        params.AD)) .* params.R) + (-10.*1i .* params.S + 10.*1i .* params.AB + -40.*1i .* params.AI + 10.*...
+        1i .* params.AK + 10.*1i .* params.AT + (20 .* params.AD)) .* params.cotbeta) ./ (30.*1i .*...
+        params.AD - 15 .* params.S - 15 .* params.AB + 60 .* params.AI - 15 .* params.AK - 15 .* params.AT);
+end

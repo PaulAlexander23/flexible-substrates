@@ -1,20 +1,18 @@
 function out = computeEigenvalues(method, params, modes, numberOfPolynomials)
-    if nargin < 12
+    if nargin < 4
         numberOfPolynomials = 50;
     end
     
     if (method == "numerical") || (method == "n")
-        val = computeNumerical(params.k,params.R,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK,params.AI,numberOfPolynomials,modes);
+        val = computeNumerical(params, numberOfPolynomials, modes);
     elseif (method == "longwave") || (method == "l")
-        val = computeLongWave(params.k,params.R,params.cotbeta,0,0,0,0,params.AK,0);
+        val = computeLongWave(params);
     elseif (method == "scaled longwave") || (method == "s")
-        val = computeLongWave(params.k,params.R,params.cotbeta,params.S*(params.k.^2),params.AD*(params.k),params.AT*(params.k.^2),params.AB*(params.k.^4),params.AK,params.AI*(params.k.^2));
+        val = computeLongWaveScaled(params);
     elseif (method == "zeroreynolds") || (method == "z")
-        val = computeZeroReynolds(params.k,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK,params.AI);
+        val = computeZeroReynolds(params);
     elseif (method == "zeroreynoldspoly") || (method == "p")
-        val = computeZeroReynoldsPolySolve(params.k,params.cotbeta,params.S,params.AD,params.AT,params.AB,params.AK);
-    elseif (method == "zeroreynoldslongwave") || (method == "zl")
-        val = computeZeroReynoldsLongWave(params.k,params.cotbeta,params.AD);
+        val = computeZeroReynoldsPolySolve(params);
     else
         error("Unknown method.");
     end

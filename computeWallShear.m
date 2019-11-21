@@ -1,4 +1,4 @@
-function term2 = computeWallTerm2(k, z, phi)
+function term2 = computeWallShear(k, z, phi)
     dphidz = gradient(phi, z);
     d2phidz2 = gradient(dphidz, z);
     d2phidz2(1) = 2*d2phidz2(1);

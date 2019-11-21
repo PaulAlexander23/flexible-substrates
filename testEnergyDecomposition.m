@@ -9,7 +9,7 @@ function testEnergyOfZeroPerturbation(testCase)
     phi = zeros(100,1);
     eta = 0;
     h = 0;
-    params = struct('R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    params = struct('cotbeta',1,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
     actual = computeEnergy(k, c, z, phi, eta, h, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
@@ -22,74 +22,102 @@ function testEnergyOfConstantPerturbation(testCase)
     phi = ones(100,1);
     eta = 1;
     h = 1;
-    params = struct('R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    params = struct('cotbeta',1,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
     actual = computeEnergy(k, c, z, phi, eta, h, params);
-    expected = 37*pi;
+    expected = 33*pi;
     verifyEqual(testCase, actual, expected)
 end
 
-function testSurfaceEffectsOfZeroPerturbation(testCase)
+function testSurfaceShearOfZeroPerturbation(testCase)
     k = 2;
-    c = 0;
     z = linspace(0,1)';
     phi = zeros(100,1);
-    h = 0;
-    actual = computeSurfaceEffects(k, c, z, phi, h);
+    actual = computeSurfaceShear(k, z, phi);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
-function testSurfaceEffectsOfConstantPerturbation(testCase)
+function testSurfaceShearOfConstantPerturbation(testCase)
     k = 2;
-    c = -1i;
     z = linspace(0,1)';
     phi = (z.^2/2 + z) * (1 + 1i);
-    h = 1;
-    actual = computeSurfaceEffects(k, c, z, phi, h);
-    expected = 8*pi + 32*pi;
+    actual = computeSurfaceShear(k, z, phi);
+    expected = 56*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
 end
 
-function testWallEffectsOfZeroPerturbation(testCase)
+function testWallDampingOfZeroPerturbation(testCase)
     k = 2;
     c = 0;
-    z = linspace(0,1)';
-    phi = zeros(100,1);
     eta = 0;
     params = struct('AD',1);
-    actual = computeWallEffects(k, c, z, phi, eta, params);
+    actual = computeWallDamping(k, c, eta, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
-function testWallEffectsOfConstantPerturbation(testCase)
+function testWallDampingOfConstantPerturbation(testCase)
     k = 2;
     c = 1-1i;
-    z = linspace(0,1)';
-    phi = z * (1 + 1i);
     eta = 2;
     params = struct('AD',1);
-    actual = computeWallEffects(k, c, z, phi, eta, params);
-    expected = -64*pi + 128*pi;
+    actual = computeWallDamping(k, c, eta, params);
+    expected = -64 * pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
 end
 
-function testFluidEffectsOfZeroPerturbation(testCase)
+function testWallShearOfZeroPerturbation(testCase)
     k = 2;
     z = linspace(0,1)';
     phi = zeros(100,1);
+    actual = computeWallShear(k, z, phi);
+    expected = 0;
+    verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
+end
+
+function testWallShearOfConstantPerturbation(testCase)
+    k = 2;
+    z = linspace(0,1)';
+    phi = (z.^2/2 + z) * (1 + 1i);
+    actual = computeWallShear(k, z, phi);
+    expected = -4*pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
+end
+
+function testReynoldsStressOfZeroPerturbation(testCase)
+    vec = zeros(50,1);
     params = struct('R',1);
-    actual = computeFluidEffects(k, z, phi, params);
+    actual = computeReynoldsStress(vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
-function testFluidEffectsOfConstantPerturbation(testCase)
+function testReynoldsStressOfConstantPerturbation(testCase)
+    vec = [1/2+2i,2,1/2].';
+    params = struct('R',1);
+    actual = computeReynoldsStress(vec, params);
+    expected = -64/3*pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', 1e-13)
+end
+
+function testViscousDissipationOfZeroPerturbation(testCase)
     k = 2;
     z = linspace(0,1)';
-    phi = (z.^2 + 2*z + 2i);
-    params = struct('R',1);
-    actual = computeFluidEffects(k, z, phi, params);
-    expected = -2088/5*pi - 64/3*pi;
+    phi = zeros(100,1);
+    actual = computeViscousDissipation(k, z, phi);
+    expected = 0;
+    verifyEqual(testCase, actual, expected)
+end
+
+function testViscousDissipationOfConstantPerturbation(testCase)
+    k = 1;
+    z = linspace(0,1)';
+    phi = z.^2/2;
+    actual = computeViscousDissipation(k, z, phi);
+    expected = -103/15*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
+end
+
+function params = defaultParams()
+    params = makeParamsStruct(1,1,1,1,1,1,1,1,1);
 end
