@@ -1,8 +1,7 @@
 function h = computeH(val,vec)
     
-    delta = 0.001;
-    phi = computePhi([1-delta/2, 1], squeeze(vec));
-    dphidz = (phi(2) - phi(1))/delta;
+    phi = computePhi(1, vec);
+    dphidz = computedPhidz(1, vec)/2;
 
-    h = phi(2) / (val - dphidz);
+    h = phi / (val - dphidz);
 end

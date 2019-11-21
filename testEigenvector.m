@@ -17,7 +17,7 @@ function testEta(testCase)
     vec = [chebyCoeff, 0,0,0,0, 0,0,0, 0,0,0]';
     actual = computeEta(val,vec);
     expected = 0;
-    verifyEqual(testCase, actual, expected, 'RelTol', 1e-3)
+    verifyEqual(testCase, actual, expected)
 end
 
 function testH(testCase)
@@ -26,17 +26,17 @@ function testH(testCase)
     vec = [chebyCoeff, 0,0,0,0, 0,0,0, 0,0,0]';
     actual = computeH(val,vec);
     expected = -16/17 - 4i/17;
-    verifyEqual(testCase, actual, expected, 'RelTol', 1e-3)
+    verifyEqual(testCase, actual, expected)
 end
 
 function testU(testCase)
     x = linspace(0,1)';
     chebyCoeff = [3/2,  7/4, 1/2, 1/4];
-    phi = computePhi(x, [chebyCoeff, 0,0,0,0, 0,0,0, 0,0,0]');
-    actual = computeU(x, phi);
+    vec = [chebyCoeff, 0,0,0,0, 0,0,0, 0,0,0]';
+    actual = computeU(x, vec);
     x = x*2 - 1;
     expected = 2 * (3 * x.^2 + 2 * x + 1);
-    verifyEqual(testCase, actual, expected, 'AbsTol', 1e-1, 'RelTol', 1e-1)
+    verifyEqual(testCase, actual, expected, 'RelTol', 1e-15)
 end
 
 function testV(testCase)
