@@ -1,13 +1,8 @@
-function term2 = computeWallShear(k, z, phi)
-    dphidz = gradient(phi, z);
-    d2phidz2 = gradient(dphidz, z);
-    d2phidz2(1) = 2*d2phidz2(1);
-    d2phidz2(end) = 2*d2phidz2(end);
-    d2phidz2(2) = 4/3*d2phidz2(2);
-    d2phidz2(end-1) = 4/3*d2phidz2(end-1);
+function term2 = computeWallShear(k, vec)
+    phi = computePhi(0, vec);
+    dphidz = computedPhidz(0, vec);
+    d2phidz2 = computed2Phidz2(0, vec);
     
-    z0LogicIndex = (z == 0);
-    
-    term2 = -4*pi/k * real(conj(dphidz(z0LogicIndex)) * d2phidz2(z0LogicIndex) ...
-        + k^2 * dphidz(z0LogicIndex) * conj(phi(z0LogicIndex)));
+    term2 = -4*pi/k * real(conj(dphidz) * d2phidz2 ...
+        + k^2 * dphidz * conj(phi));
 end

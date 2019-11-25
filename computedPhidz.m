@@ -4,6 +4,7 @@ function dphidz = computedPhidz(z, vec)
     
     Dvec = D * vec;
     
-    dphidz = 2 * computePhi(z, Dvec);
+    dydx = 2;
+    dphidz = dydx * computePhi(z, Dvec);
     
 end

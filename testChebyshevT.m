@@ -79,3 +79,67 @@ function testProduct(testCase)
     
     verifyEqual(testCase, actual, expected);
 end
+
+function testNormConstant(testCase)
+    vec = [1, 0, 0]';
+    
+    actual = computeChebyshevNorm(vec);
+    expected = [1, 0, 0, 0, 0, 0, 0, 0, 0]';
+    
+    verifyEqual(testCase, actual, expected)
+end
+
+function testNormComplexConstant(testCase)
+    vec = [1 + 1i, 0, 0]';
+    
+    actual = computeChebyshevNorm(vec);
+    expected = [2, 0, 0, 0, 0, 0, 0, 0, 0]';
+    
+    verifyEqual(testCase, actual, expected)
+end
+
+function testNormLinear(testCase)
+    vec = [0, 1, 0]';
+    
+    actual = computeChebyshevNorm(vec);
+    expected = [1/2, 0, 1/2, 0, 0, 0, 0, 0, 0]';
+    
+    verifyEqual(testCase, actual, expected)
+end
+
+function testNormComplexLinear(testCase)
+    vec = [0, 1 + 1i, 0]';
+    
+    actual = computeChebyshevNorm(vec);
+    expected = [1, 0, 1, 0, 0, 0, 0, 0, 0]';
+    
+    verifyEqual(testCase, actual, expected)
+end
+
+function testNormQuadratic(testCase)
+    vec = [0, 0, -1]';
+    
+    actual = computeChebyshevNorm(vec);
+    expected = [1/2, 0, 0, 0, 1/2, 0, 0, 0, 0]';
+    
+    verifyEqual(testCase, actual, expected)
+end
+
+function testNormComplexQuadratic(testCase)
+    vec = [0, 0, -1 - 1i]';
+    
+    actual = computeChebyshevNorm(vec);
+    expected = [1, 0, 0, 0, 1, 0, 0, 0, 0]';
+    
+    verifyEqual(testCase, actual, expected)
+end
+
+function testNorm(testCase)
+    N = 3;
+    vec = [2, 1i, 2]';
+    
+    actual = computeChebyshevNorm(vec);
+    expected = [13, 0, 17, 0, 4, 0, 0, 0, 0]'/2;
+    
+    verifyEqual(testCase, actual, expected)
+end

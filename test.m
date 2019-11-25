@@ -1,5 +1,5 @@
 
-files = dir;
+files = dir('*.m');
 testFiles = extractTestFiles(files);
 testResults = [];
 

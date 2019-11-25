@@ -30,18 +30,17 @@ end
 
 function testSurfaceShearOfZeroPerturbation(testCase)
     k = 2;
-    z = linspace(0,1)';
-    phi = zeros(100,1);
-    actual = computeSurfaceShear(k, z, phi);
+    vec = zeros(100,1);
+    actual = computeSurfaceShear(k, vec);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testSurfaceShearOfConstantPerturbation(testCase)
     k = 2;
-    z = linspace(0,1)';
-    phi = (z.^2/2 + z) * (1 + 1i);
-    actual = computeSurfaceShear(k, z, phi);
+    vec = zeros(100,1);
+    vec(1:3) = [11, 12, 1] * (1 + 1i)/16;
+    actual = computeSurfaceShear(k, vec);
     expected = 56*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
 end
@@ -68,18 +67,17 @@ end
 
 function testWallShearOfZeroPerturbation(testCase)
     k = 2;
-    z = linspace(0,1)';
-    phi = zeros(100,1);
-    actual = computeWallShear(k, z, phi);
+    vec = zeros(100,1);
+    actual = computeWallShear(k, vec);
     expected = 0;
     verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
 end
 
 function testWallShearOfConstantPerturbation(testCase)
     k = 2;
-    z = linspace(0,1)';
-    phi = (z.^2/2 + z) * (1 + 1i);
-    actual = computeWallShear(k, z, phi);
+    vec = zeros(100,1);
+    vec(1:3) = [11, 12, 1] * (1 + 1i)/16;
+    actual = computeWallShear(k, vec);
     expected = -4*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
 end
