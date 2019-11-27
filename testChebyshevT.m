@@ -28,6 +28,29 @@ function test2UpTo100(testCase)
     end
 end
 
+function testInverseChebyshevTransform(testCase)
+    N = 3;
+    vec = eye(N);
+    z = linspace(-1,1)';
+    
+    actual = inverseChebyshevTransform(vec(:,1), z);
+    expected = ones(length(z),1);
+    verifyEqual(testCase, actual, expected)
+    
+    actual = inverseChebyshevTransform(vec(:,2), z);
+    expected = z;
+    verifyEqual(testCase, actual, expected)
+    
+    actual = inverseChebyshevTransform(vec(:,3), z);
+    expected = 2*z.^2 - 1;
+    verifyEqual(testCase, actual, expected)
+    
+    actual = inverseChebyshevTransform([1, 1, 1]', z);
+    expected = 2*z.^2 + z;
+    verifyEqual(testCase, actual, expected, 'AbsTol', eps)
+    
+end
+
 function testDifferentiation(testCase)
     N = 4;
     vec = eye(N);
