@@ -107,7 +107,15 @@ function testReynoldsStressOfConstantPerturbation(testCase)
     params = struct('R',1);
     actual = computeReynoldsStress(vec, params);
     expected = -64/3*pi;
-    verifyEqual(testCase, actual, expected, 'RelTol', 1e-13)
+    verifyEqual(testCase, actual, expected, 'RelTol', 1e-4)
+end
+
+function testReynoldsStressOfConstantPerturbation2(testCase)
+    vec = [3i/4, -1 + 1i, 1i/4].';
+    params = struct('R',1);
+    actual = computeReynoldsStress(vec, params);
+    expected = 8 * pi / 3;
+    verifyEqual(testCase, actual, expected, 'RelTol', 1e-3)
 end
 
 function testViscousDissipationOfZeroPerturbation(testCase)
