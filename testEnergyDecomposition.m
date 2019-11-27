@@ -2,6 +2,18 @@ function tests = testEnergyDecomposition()
     tests = functiontests(localfunctions);
 end
 
+function testNoSlipBoundaryCondition(testCase)
+    params = makeParamsStruct(1,1,1,1,1,1,1,1,1);
+    numberOfPolynomials = 50;
+    [val,vec] = chebyshevTauFlexibleOS(params,numberOfPolynomials);
+    val = val(1);
+    vec = vec(1:end/2,1);
+    
+    actual = computedPhidz(0, vec);
+    expected = -2 * computeEta(val, vec);
+    verifyEqual(testCase, actual, expected, 'RelTol', 1e-11);
+end
+
 function testEnergyOfZeroPerturbation(testCase)
     k = 2;
     c = 0;
