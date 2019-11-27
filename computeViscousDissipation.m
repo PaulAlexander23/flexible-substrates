@@ -1,4 +1,4 @@
-function term1 = computeViscousDissipation(k, z, phi, vec)
+function term1 = computeViscousDissipation(k, vec)
     N = length(vec);
     D = computeChebyshevDifferentiationMatrix(N);
 

@@ -123,7 +123,7 @@ function testViscousDissipationOfZeroPerturbation(testCase)
     z = linspace(0,1)';
     phi = zeros(100,1);
     vec = zeros(5,1);
-    actual = computeViscousDissipation(k, z, phi, vec);
+    actual = computeViscousDissipation(k, vec);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
@@ -134,7 +134,7 @@ function testViscousDissipationOfConstantPerturbation1(testCase)
     phi = 1;
     vec = zeros(5,1);
     vec(1) = 1;
-    actual = computeViscousDissipation(k, z, phi, vec);
+    actual = computeViscousDissipation(k, vec);
     expected = - 32 * pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
@@ -146,7 +146,7 @@ function testViscousDissipationOfConstantPerturbationLinear(testCase)
     vec = zeros(5,1);
     vec(1) = 1;
     vec(2) = 1;
-    actual = computeViscousDissipation(k, z, phi, vec);
+    actual = computeViscousDissipation(k, vec);
     expected = - 112/3 * pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
@@ -157,7 +157,7 @@ function testViscousDissipationOfConstantPerturbation(testCase)
     phi = z.^2/2;
     vec = zeros(5,1);
     vec(1:3) = [3, 4, 1]/16;
-    actual = computeViscousDissipation(k, z, phi, vec);
+    actual = computeViscousDissipation(k, vec);
     expected = -103/15*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
