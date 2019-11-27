@@ -54,7 +54,7 @@ function testSurfaceShearOfConstantPerturbation(testCase)
     vec(1:3) = [11, 12, 1] * (1 + 1i)/16;
     actual = computeSurfaceShear(k, vec);
     expected = 56*pi;
-    verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testWallDampingOfZeroPerturbation(testCase)
@@ -74,7 +74,7 @@ function testWallDampingOfConstantPerturbation(testCase)
     params = struct('AD',1);
     actual = computeWallDamping(k, c, eta, params);
     expected = -64 * pi;
-    verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
+    verifyEqual(testCase, actual, expected, 'RelTol', 2*eps)
 end
 
 function testWallShearOfZeroPerturbation(testCase)
@@ -82,7 +82,7 @@ function testWallShearOfZeroPerturbation(testCase)
     vec = zeros(100,1);
     actual = computeWallShear(k, vec);
     expected = 0;
-    verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
+    verifyEqual(testCase, actual, expected)
 end
 
 function testWallShearOfConstantPerturbation(testCase)
@@ -91,7 +91,7 @@ function testWallShearOfConstantPerturbation(testCase)
     vec(1:3) = [11, 12, 1] * (1 + 1i)/16;
     actual = computeWallShear(k, vec);
     expected = -4*pi;
-    verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testReynoldsStressOfZeroPerturbation(testCase)
@@ -107,7 +107,7 @@ function testReynoldsStressOfConstantPerturbation(testCase)
     params = struct('R',1);
     actual = computeReynoldsStress(vec, params);
     expected = -64/3*pi;
-    verifyEqual(testCase, actual, expected, 'RelTol', 1e-4)
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testReynoldsStressOfConstantPerturbation2(testCase)
@@ -115,7 +115,7 @@ function testReynoldsStressOfConstantPerturbation2(testCase)
     params = struct('R',1);
     actual = computeReynoldsStress(vec, params);
     expected = 8 * pi / 3;
-    verifyEqual(testCase, actual, expected, 'RelTol', 1e-3)
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testViscousDissipationOfZeroPerturbation(testCase)
