@@ -122,18 +122,44 @@ function testViscousDissipationOfZeroPerturbation(testCase)
     k = 2;
     z = linspace(0,1)';
     phi = zeros(100,1);
-    actual = computeViscousDissipation(k, z, phi);
+    vec = zeros(5,1);
+    actual = computeViscousDissipation(k, z, phi, vec);
     expected = 0;
     verifyEqual(testCase, actual, expected)
+end
+
+function testViscousDissipationOfConstantPerturbation1(testCase)
+    k = 2;
+    z = linspace(0,1)';
+    phi = 1;
+    vec = zeros(5,1);
+    vec(1) = 1;
+    actual = computeViscousDissipation(k, z, phi, vec);
+    expected = - 32 * pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
+end
+
+function testViscousDissipationOfConstantPerturbationLinear(testCase)
+    k = 1;
+    z = linspace(0,1)';
+    phi = 2 * z;
+    vec = zeros(5,1);
+    vec(1) = 1;
+    vec(2) = 1;
+    actual = computeViscousDissipation(k, z, phi, vec);
+    expected = - 112/3 * pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testViscousDissipationOfConstantPerturbation(testCase)
     k = 1;
     z = linspace(0,1)';
     phi = z.^2/2;
-    actual = computeViscousDissipation(k, z, phi);
+    vec = zeros(5,1);
+    vec(1:3) = [3, 4, 1]/16;
+    actual = computeViscousDissipation(k, z, phi, vec);
     expected = -103/15*pi;
-    verifyEqual(testCase, actual, expected, 'RelTol', 0.01)
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function params = defaultParams()
