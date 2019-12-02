@@ -53,7 +53,7 @@ function testSurfaceShearOfConstantPerturbation(testCase)
     vec = zeros(100,1);
     vec(1:3) = [11, 12, 1] * (1 + 1i)/16;
     actual = computeSurfaceShear(k, vec);
-    expected = 56*pi;
+    expected = -40*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
