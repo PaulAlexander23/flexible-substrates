@@ -6,8 +6,8 @@ function energy = computeEnergy(val, vec, params)
     dydz = 2;
     Dvec = dydz * D * vec;
     
-    integrand = computeChebyshevProduct(Dvec, Dvec) / params.k ...
-        + computeChebyshevProduct(vec,vec) * params.k;
+    integrand = computeChebyshevNorm(Dvec) / params.k ...
+        + computeChebyshevNorm(vec) * params.k;
     I = computeChebyshevIntegrationMatrix(length(integrand));
     
     integral = I * integrand / dydz;

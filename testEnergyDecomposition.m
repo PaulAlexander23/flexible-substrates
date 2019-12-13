@@ -16,7 +16,7 @@ end
 
 function testEnergyOfZeroPerturbation(testCase)
     val = 0;
-    vec = [0, 0, 0]';
+    vec = [0, 0, 0].';
     params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
     actual = computeEnergy(val, vec, params);
     expected = 0;
@@ -25,10 +25,19 @@ end
 
 function testEnergyOfConstantPerturbation(testCase)
     val = 1 + 1i;
-    vec = [1, 0, 0]';
+    vec = [1, 0, 0].';
     params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
     actual = computeEnergy(val, vec, params);
     expected = 4*pi + 13.5*pi + pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
+end
+
+function testEnergyOfConstantComplexPerturbation(testCase)
+    val = 1 + 1i;
+    vec = [1 + 1i, 0, 0].';
+    params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    actual = computeEnergy(val, vec, params);
+    expected = 8*pi + 27*pi + 2*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
