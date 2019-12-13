@@ -15,29 +15,21 @@ function testNoSlipBoundaryCondition(testCase)
 end
 
 function testEnergyOfZeroPerturbation(testCase)
-    k = 2;
-    c = 0;
-    z = linspace(0,1)';
-    phi = zeros(100,1);
-    eta = 0;
-    h = 0;
-    params = struct('cotbeta',1,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
-    actual = computeEnergy(k, c, z, phi, eta, h, params);
+    val = 0;
+    vec = [0, 0, 0]';
+    params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    actual = computeEnergy(val, vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testEnergyOfConstantPerturbation(testCase)
-    k = 2;
-    c = 1 + 1i;
-    z = linspace(0,1)';
-    phi = ones(100,1);
-    eta = 1;
-    h = 1;
-    params = struct('cotbeta',1,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
-    actual = computeEnergy(k, c, z, phi, eta, h, params);
-    expected = 33*pi;
-    verifyEqual(testCase, actual, expected)
+    val = 1 + 1i;
+    vec = [1, 0, 0]';
+    params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    actual = computeEnergy(val, vec, params);
+    expected = 4*pi + 13.5*pi + pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testSurfaceShearOfZeroPerturbation(testCase)

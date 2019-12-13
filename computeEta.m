@@ -1,5 +1,8 @@
 function eta = computeEta(val, vec)
     phi = computePhi(0, squeeze(vec));
-    
-    eta = phi / val;
+    if val ~= 0
+        eta = phi / val;
+    else
+        eta = 0;
+    end
 end
