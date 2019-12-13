@@ -33,55 +33,53 @@ function testEnergyOfConstantPerturbation(testCase)
 end
 
 function testSurfaceShearOfZeroPerturbation(testCase)
-    k = 2;
+    params = struct('k', 2);
     vec = zeros(100,1);
-    actual = computeSurfaceShear(k, vec);
+    actual = computeSurfaceShear(vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testSurfaceShearOfConstantPerturbation(testCase)
-    k = 2;
+    params = struct('k', 2);
     vec = zeros(100,1);
     vec(1:3) = [11, 12, 1] * (1 + 1i)/16;
-    actual = computeSurfaceShear(k, vec);
+    actual = computeSurfaceShear(vec, params);
     expected = -40*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testWallDampingOfZeroPerturbation(testCase)
-    k = 2;
-    c = 0;
-    eta = 0;
-    params = struct('AD',1);
-    actual = computeWallDamping(k, c, eta, params);
+    val = 0;
+    vec = [0, 0, 0]';
+    params = struct('k', 2, 'AD', 1);
+    actual = computeWallDamping(val, vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testWallDampingOfConstantPerturbation(testCase)
-    k = 2;
-    c = 1-1i;
-    eta = 2;
-    params = struct('AD',1);
-    actual = computeWallDamping(k, c, eta, params);
+    val = 1 - 1i;
+    vec = [2+2i,0,0].';
+    params = struct('k', 2, 'AD', 1);
+    actual = computeWallDamping(val, vec, params);
     expected = -64 * pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 2*eps)
 end
 
 function testWallShearOfZeroPerturbation(testCase)
-    k = 2;
+    params = struct('k', 2);
     vec = zeros(100,1);
-    actual = computeWallShear(k, vec);
+    actual = computeWallShear(vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testWallShearOfConstantPerturbation(testCase)
-    k = 2;
+    params = struct('k', 2);
     vec = zeros(100,1);
     vec(1:3) = [11, 12, 1] * (1 + 1i)/16;
-    actual = computeWallShear(k, vec);
+    actual = computeWallShear(vec, params);
     expected = -4*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
@@ -111,45 +109,37 @@ function testReynoldsStressOfConstantPerturbation2(testCase)
 end
 
 function testViscousDissipationOfZeroPerturbation(testCase)
-    k = 2;
-    z = linspace(0,1)';
-    phi = zeros(100,1);
+    params = struct('k', 2);
     vec = zeros(5,1);
-    actual = computeViscousDissipation(k, vec);
+    actual = computeViscousDissipation(vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testViscousDissipationOfConstantPerturbation1(testCase)
-    k = 2;
-    z = linspace(0,1)';
-    phi = 1;
+    params = struct('k', 2);
     vec = zeros(5,1);
     vec(1) = 1;
-    actual = computeViscousDissipation(k, vec);
+    actual = computeViscousDissipation(vec, params);
     expected = - 32 * pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testViscousDissipationOfConstantPerturbationLinear(testCase)
-    k = 1;
-    z = linspace(0,1)';
-    phi = 2 * z;
+    params = struct('k', 1);
     vec = zeros(5,1);
     vec(1) = 1;
     vec(2) = 1;
-    actual = computeViscousDissipation(k, vec);
+    actual = computeViscousDissipation(vec, params);
     expected = - 112/3 * pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testViscousDissipationOfConstantPerturbation(testCase)
-    k = 1;
-    z = linspace(0,1)';
-    phi = z.^2/2;
+    params = struct('k', 1);
     vec = zeros(5,1);
     vec(1:3) = [3, 4, 1]/16;
-    actual = computeViscousDissipation(k, vec);
+    actual = computeViscousDissipation(vec, params);
     expected = -103/15*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end

@@ -1,4 +1,4 @@
-function term1 = computeViscousDissipation(k, vec)
+function term1 = computeViscousDissipation(vec, params)
     N = length(vec);
     D = computeChebyshevDifferentiationMatrix(N);
 
@@ -7,8 +7,8 @@ function term1 = computeViscousDissipation(k, vec)
     D2vec = dydz * D * Dvec;
     
     integrand = computeChebyshevNorm(D2vec) ...
-    	+ 2 * k^2 * computeChebyshevNorm(Dvec) ...
-        + k^4 * computeChebyshevNorm(vec);
+    	+ 2 * params.k^2 * computeChebyshevNorm(Dvec) ...
+        + params.k^4 * computeChebyshevNorm(vec);
     
     I = computeChebyshevIntegrationMatrix(N^2);
     
@@ -16,6 +16,6 @@ function term1 = computeViscousDissipation(k, vec)
     
     integral = (computePhi(1, integral) - computePhi(0, integral)) ;
     
-    term1 = - 4 * pi / k * integral;
+    term1 = - 4 * pi / params.k * integral;
 
 end
