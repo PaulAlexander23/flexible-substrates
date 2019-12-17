@@ -15,81 +15,89 @@ function testNoSlipBoundaryCondition(testCase)
 end
 
 function testEnergyOfZeroPerturbation(testCase)
-    k = 2;
-    c = 0;
-    z = linspace(0,1)';
-    phi = zeros(100,1);
-    eta = 0;
-    h = 0;
-    params = struct('cotbeta',1,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
-    actual = computeEnergy(k, c, z, phi, eta, h, params);
+    val = 0;
+    vec = [0, 0, 0].';
+    params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    actual = computeEnergy(val, vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testEnergyOfConstantPerturbation(testCase)
-    k = 2;
-    c = 1 + 1i;
-    z = linspace(0,1)';
-    phi = ones(100,1);
-    eta = 1;
-    h = 1;
-    params = struct('cotbeta',1,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
-    actual = computeEnergy(k, c, z, phi, eta, h, params);
-    expected = 33*pi;
-    verifyEqual(testCase, actual, expected)
+    val = 1 + 1i;
+    vec = [1, 0, 0].';
+    params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    actual = computeEnergy(val, vec, params);
+    expected = 4*pi + 16.5*pi + pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
+end
+
+function testEnergyOfConstantComplexPerturbation(testCase)
+    val = 1 + 1i;
+    vec = [1 + 1i, 0, 0].';
+    params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    actual = computeEnergy(val, vec, params);
+    expected = 8*pi + 27*pi + 2*pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
+end
+
+function testEnergyOfConstantComplexPerturbation2(testCase)
+    val = 1 - 1i;
+    vec = [1 + 1i, 0, 0].';
+    params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    actual = computeEnergy(val, vec, params);
+    expected = 8*pi + 27*pi + 2*pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testSurfaceShearOfZeroPerturbation(testCase)
-    k = 2;
+    params = struct('k', 2);
     vec = zeros(100,1);
-    actual = computeSurfaceShear(k, vec);
+    actual = computeSurfaceShear(vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testSurfaceShearOfConstantPerturbation(testCase)
-    k = 2;
+    params = struct('k', 2);
     vec = zeros(100,1);
     vec(1:3) = [11, 12, 1] * (1 + 1i)/16;
-    actual = computeSurfaceShear(k, vec);
+    actual = computeSurfaceShear(vec, params);
     expected = -40*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testWallDampingOfZeroPerturbation(testCase)
-    k = 2;
-    c = 0;
-    eta = 0;
-    params = struct('AD',1);
-    actual = computeWallDamping(k, c, eta, params);
+    val = 0;
+    vec = [0, 0, 0]';
+    params = struct('k', 2, 'AD', 1);
+    actual = computeWallDamping(val, vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testWallDampingOfConstantPerturbation(testCase)
-    k = 2;
-    c = 1-1i;
-    eta = 2;
-    params = struct('AD',1);
-    actual = computeWallDamping(k, c, eta, params);
+    val = 1 - 1i;
+    vec = [2+2i,0,0].';
+    params = struct('k', 2, 'AD', 1);
+    actual = computeWallDamping(val, vec, params);
     expected = -64 * pi;
     verifyEqual(testCase, actual, expected, 'RelTol', 2*eps)
 end
 
 function testWallShearOfZeroPerturbation(testCase)
-    k = 2;
+    params = struct('k', 2);
     vec = zeros(100,1);
-    actual = computeWallShear(k, vec);
+    actual = computeWallShear(vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testWallShearOfConstantPerturbation(testCase)
-    k = 2;
+    params = struct('k', 2);
     vec = zeros(100,1);
     vec(1:3) = [11, 12, 1] * (1 + 1i)/16;
-    actual = computeWallShear(k, vec);
+    actual = computeWallShear(vec, params);
     expected = -4*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
@@ -119,47 +127,58 @@ function testReynoldsStressOfConstantPerturbation2(testCase)
 end
 
 function testViscousDissipationOfZeroPerturbation(testCase)
-    k = 2;
-    z = linspace(0,1)';
-    phi = zeros(100,1);
+    params = struct('k', 2);
     vec = zeros(5,1);
-    actual = computeViscousDissipation(k, vec);
+    actual = computeViscousDissipation(vec, params);
     expected = 0;
     verifyEqual(testCase, actual, expected)
 end
 
 function testViscousDissipationOfConstantPerturbation1(testCase)
-    k = 2;
-    z = linspace(0,1)';
-    phi = 1;
+    params = struct('k', 2);
     vec = zeros(5,1);
     vec(1) = 1;
-    actual = computeViscousDissipation(k, vec);
+    actual = computeViscousDissipation(vec, params);
     expected = - 32 * pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testViscousDissipationOfConstantPerturbationLinear(testCase)
-    k = 1;
-    z = linspace(0,1)';
-    phi = 2 * z;
+    params = struct('k', 1);
     vec = zeros(5,1);
     vec(1) = 1;
     vec(2) = 1;
-    actual = computeViscousDissipation(k, vec);
+    actual = computeViscousDissipation(vec, params);
     expected = - 112/3 * pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
 function testViscousDissipationOfConstantPerturbation(testCase)
-    k = 1;
-    z = linspace(0,1)';
-    phi = z.^2/2;
+    params = struct('k', 1);
     vec = zeros(5,1);
     vec(1:3) = [3, 4, 1]/16;
-    actual = computeViscousDissipation(k, vec);
+    actual = computeViscousDissipation(vec, params);
     expected = -103/15*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
+end
+
+function testHydrodynamicsOfZeroPerturbation(testCase)
+    params = struct('cotbeta', 1);
+    val = 0;
+    vec = zeros(100,1);
+    actual = computeHydrodynamics(val, vec, params);
+    expected = 0;
+    verifyEqual(testCase, actual, expected)
+end
+
+function testHydrodynamicsOfConstantPerturbation(testCase)
+    params = struct('cotbeta', 0.5);
+    val = 0.5i;
+    vec = zeros(100,1);
+    vec(1) = 1 + 1i;
+    actual = computeHydrodynamics(val, vec, params);
+    expected = 16 * pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', 2*eps)
 end
 
 function params = defaultParams()
