@@ -41,6 +41,15 @@ function testEnergyOfConstantComplexPerturbation(testCase)
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
+function testEnergyOfConstantComplexPerturbation2(testCase)
+    val = 1 - 1i;
+    vec = [1 + 1i, 0, 0].';
+    params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
+    actual = computeEnergy(val, vec, params);
+    expected = 8*pi + 27*pi + 2*pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', eps)
+end
+
 function testSurfaceShearOfZeroPerturbation(testCase)
     params = struct('k', 2);
     vec = zeros(100,1);

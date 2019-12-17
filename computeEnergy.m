@@ -21,7 +21,7 @@ function energy = computeEnergy(val, vec, params)
     
     h = computeH(val, vec);
     
-    surface = (params.S * params.k - 2 * params.cotbeta / params.k) * abs(h)^2;
+    surface = (params.S * params.k + 2 * params.cotbeta / params.k) * abs(h)^2;
     
     energy = 2 * pi * (kinetic + wall + surface);
 end
