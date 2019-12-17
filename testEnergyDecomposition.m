@@ -28,7 +28,7 @@ function testEnergyOfConstantPerturbation(testCase)
     vec = [1, 0, 0].';
     params = struct('cotbeta',1,'k',2,'R',1,'AI',1,'AT',1,'AB',1,'AK',1,'S',1);
     actual = computeEnergy(val, vec, params);
-    expected = 4*pi + 13.5*pi + pi;
+    expected = 4*pi + 16.5*pi + pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
 end
 
@@ -160,6 +160,25 @@ function testViscousDissipationOfConstantPerturbation(testCase)
     actual = computeViscousDissipation(vec, params);
     expected = -103/15*pi;
     verifyEqual(testCase, actual, expected, 'RelTol', eps)
+end
+
+function testHydrodynamicsOfZeroPerturbation(testCase)
+    params = struct('cotbeta', 1);
+    val = 0;
+    vec = zeros(100,1);
+    actual = computeHydrodynamics(val, vec, params);
+    expected = 0;
+    verifyEqual(testCase, actual, expected)
+end
+
+function testHydrodynamicsOfConstantPerturbation(testCase)
+    params = struct('cotbeta', 0.5);
+    val = 0.5i;
+    vec = zeros(100,1);
+    vec(1) = 1 + 1i;
+    actual = computeHydrodynamics(val, vec, params);
+    expected = 16 * pi;
+    verifyEqual(testCase, actual, expected, 'RelTol', 2*eps)
 end
 
 function params = defaultParams()
